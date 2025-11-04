@@ -36,3 +36,26 @@ yarn-error.log*
 
 # OS and editor junk
 Thumbs.db
+
+# deps
+node_modules/
+frontend/node_modules/
+backend/node_modules/
+
+# builds
+dist/
+build/
+frontend/dist/
+backend/dist/
+
+# env
+.env
+frontend/.env
+backend/.env
+*.env
+
+# local DB
+*.sqlite
+backend/backend.data.sqlite
+backend/data.sqlite
+data.sqlite
