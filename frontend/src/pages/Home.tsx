@@ -1,13 +1,68 @@
+import { Link } from "react-router-dom"
+import { motion } from "framer-motion"
+import { fadeUp, stagger, fadeIn } from "../lib/anim"
+
 export default function Home() {
   return (
-    <section className="flex flex-col items-center text-center py-20 bg-gradient-to-b from-green-100 to-white">
-      <h1 className="text-5xl font-extrabold text-green-800 mb-4">Welcome to the Paisley Highland Games</h1>
-      <p className="max-w-2xl text-gray-700 mb-8">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam at arcu purus. Etiam dapibus lectus neque, et mattis dolor varius ut.
-      </p>
-      <a href="/register" className="px-6 py-3 rounded-full bg-green-700 text-white hover:bg-green-800 transition">
-        Register to Compete
-      </a>
-    </section>
+    <>
+      {/* HERO */}
+      <div className="bg-hero-gradient border-b">
+        <div className="container-page section">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={stagger}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <motion.h1 variants={fadeUp} className="h1">
+              Welcome to the Paisley Highland Games
+            </motion.h1>
+
+            <motion.p variants={fadeUp} className="lead mt-4">
+              Experience Scotland’s iconic athletic traditions — from caber tossing to tug o’ war —
+              right here in Paisley. Browse events, register as a competitor, or check out results.
+            </motion.p>
+
+            <motion.div variants={fadeUp} className="mt-8">
+              <Link to="/register" className="btn-primary">Register to Compete</Link>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* TARTAN STRIP */}
+      <div className="bg-tartan">
+        <div className="container-page py-3"></div>
+      </div>
+
+      {/* FEATURE CARDS (reveal on scroll) */}
+      <section className="container-page section">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="grid gap-6 md:grid-cols-3"
+        >
+          {[
+            { title: "Caber Toss", desc: "The classic test of strength and control." },
+            { title: "Tug o’ War", desc: "Teams compete in a battle of grit." },
+            { title: "Stone Put", desc: "Traditional precursor to shot put." }
+          ].map((c) => (
+            <motion.div
+              key={c.title}
+              variants={fadeIn}
+              className="rounded-2xl border bg-white p-6 shadow-soft transition
+                         hover:-translate-y-0.5 hover:shadow-lg"
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.995 }}
+            >
+              <h3 className="text-lg font-semibold text-highland-800">{c.title}</h3>
+              <p className="mt-2 text-sm text-gray-600">{c.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </section>
+    </>
   )
 }
