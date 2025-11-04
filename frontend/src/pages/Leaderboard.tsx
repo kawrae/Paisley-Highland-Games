@@ -46,6 +46,7 @@ export default function Leaderboard() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
+  // Add-result modal
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
@@ -55,6 +56,11 @@ export default function Leaderboard() {
     position: 1,
     score: 0,
   });
+
+  // Delete-result modal
+  const [delOpen, setDelOpen] = useState(false);
+  const [delTarget, setDelTarget] = useState<Result | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const fetchAll = useCallback(async () => {
     setLoading(true);
@@ -113,19 +119,34 @@ export default function Leaderboard() {
     }
   };
 
-  const deleteResult = async (id: string) => {
-    const record = results.find((r) => r._id === id);
-    const label = record ? `${record.athlete} – ${record.eventName}` : "this result";
-    if (!confirm(`Delete ${label}? This cannot be undone.`)) return;
+  // Open the delete modal with the selected record
+  const askDelete = (id: string) => {
+    const rec = results.find((r) => r._id === id) || null;
+    setDelTarget(rec);
+    setDelOpen(true);
+  };
+
+  // Confirm delete
+  const confirmDelete = async () => {
+    if (!delTarget) return;
+    setDeleting(true);
+
+    // optimistic update
+    const id = delTarget._id;
     setResults((prev) => {
       const next = prev.filter((r) => r._id !== id);
       localStorage.setItem(LS_RESULTS, JSON.stringify(next));
       return next;
     });
+
     try {
       await api.delete(`/results/${id}`);
-      fetchAll();
-    } catch {}
+      await fetchAll();
+    } finally {
+      setDeleting(false);
+      setDelOpen(false);
+      setDelTarget(null);
+    }
   };
 
   const submitResult = async (e: React.FormEvent) => {
@@ -207,6 +228,7 @@ export default function Leaderboard() {
       </motion.div>
 
       <div className="rounded-2xl border bg-white shadow-soft overflow-hidden">
+        {/* Desktop */}
         <div className="hidden md:block">
           <div className="grid grid-cols-12 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700">
             <button onClick={() => toggleSort("position")} className="text-left col-span-2">Place</button>
@@ -241,7 +263,7 @@ export default function Leaderboard() {
                   {isAdmin && (
                     <div className="col-span-1 text-right">
                       <button
-                        onClick={() => deleteResult(r._id)}
+                        onClick={() => askDelete(r._id)}
                         className="rounded-md px-2 py-1 text-sm text-red-600 hover:bg-red-50"
                         title="Delete result"
                       >
@@ -256,6 +278,7 @@ export default function Leaderboard() {
           )}
         </div>
 
+        {/* Mobile */}
         <div className="md:hidden divide-y">
           {loading ? (
             <div className="p-4 text-gray-500">Loading…</div>
@@ -272,7 +295,7 @@ export default function Leaderboard() {
                 <motion.div key={r._id} variants={fieldFade} className="p-4 relative">
                   {isAdmin && (
                     <button
-                      onClick={() => deleteResult(r._id)}
+                      onClick={() => askDelete(r._id)}
                       className="absolute right-2 top-2 rounded-md px-2 py-1 text-sm text-red-600 hover:bg-red-50"
                       title="Delete result"
                     >
@@ -294,6 +317,7 @@ export default function Leaderboard() {
         </div>
       </div>
 
+      {/* Add Result modal */}
       {open && isAdmin && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <motion.div variants={fadeIn} initial="hidden" animate="visible" className="w-full max-w-lg rounded-2xl border bg-white p-6 shadow-soft">
@@ -373,6 +397,56 @@ export default function Leaderboard() {
                 </button>
               </motion.div>
             </motion.form>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Delete Result modal */}
+      {delOpen && delTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <motion.div variants={fadeIn} initial="hidden" animate="visible" className="w-full max-w-md rounded-2xl border bg-white p-6 shadow-soft">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="h2 text-lg">Delete Result</h2>
+              <button onClick={() => setDelOpen(false)} className="text-gray-500 hover:text-gray-700">✕</button>
+            </div>
+
+            <div className="space-y-3">
+              <p className="text-gray-700">
+                Are you sure you want to delete this result? This action cannot be undone.
+              </p>
+
+              <div className="rounded-lg border bg-gray-50 p-3 text-sm">
+                <div className="font-semibold text-gray-900">{delTarget.athlete}</div>
+                {delTarget.club && <div className="text-gray-600">{delTarget.club}</div>}
+                <div className="mt-1 flex items-center gap-3 text-gray-700">
+                  <span className="inline-flex items-center gap-1">
+                    <Medal pos={delTarget.position} /> Place {delTarget.position}
+                  </span>
+                  <span>•</span>
+                  <span>{delTarget.eventName}</span>
+                  <span>•</span>
+                  <span className="font-semibold text-highland-800">{delTarget.score}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setDelOpen(false)}
+                className="px-3 py-2 text-sm text-gray-600 hover:text-gray-800"
+                disabled={deleting}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700 active:scale-[0.98] disabled:opacity-60"
+                disabled={deleting}
+              >
+                {deleting ? "Deleting…" : "Delete"}
+              </button>
+            </div>
           </motion.div>
         </div>
       )}
