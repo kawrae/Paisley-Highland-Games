@@ -1,5 +1,6 @@
 // frontend/src/App.tsx
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/login" element={<Login />} />
         </Routes>
+        <Footer />
       </main>
     </>
   );
