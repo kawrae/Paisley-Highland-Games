@@ -1,50 +1,45 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react"
+// src/lib/auth.tsx
+import { createContext, useContext, useEffect, useState } from "react";
+import { api } from "./api";
 
-type Role = "guest" | "admin"
-export type User = { id: string; name: string; role: Role }
+type User = { id?: number; email: string; role: "admin" | "user" }; // id optional
 
 type AuthCtx = {
-  user: User | null
-  login: (email: string, password: string) => Promise<void>
-  logout: () => void
-}
+  user: User | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+};
 
-const AuthContext = createContext<AuthCtx | undefined>(undefined)
-const LS_KEY = "phg_user"
+const Ctx = createContext<AuthCtx>({} as AuthCtx);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const raw = localStorage.getItem(LS_KEY)
-    if (raw) setUser(JSON.parse(raw))
-  }, [])
+    const raw = localStorage.getItem("phg_user");
+    if (raw) {
+      try {
+        setUser(JSON.parse(raw));
+      } catch {
+        localStorage.removeItem("phg_user");
+      }
+    }
+  }, []);
 
   const login = async (email: string, password: string) => {
-    // PoC logic:
-    // If email is 'admin@phg.local' and password 'pass123', you are admin.
-    // Anything else becomes a 'guest'.
-    const isAdmin = email.trim().toLowerCase() === "admin@phg.local" && password === "pass123"
-    const u: User = {
-      id: crypto.randomUUID(),
-      name: isAdmin ? "Admin" : email.split("@")[0] || "Guest",
-      role: isAdmin ? "admin" : "guest",
-    }
-    setUser(u)
-    localStorage.setItem(LS_KEY, JSON.stringify(u))
-  }
+    const { data } = await api.post("/auth/login", { email, password });
+    localStorage.setItem("phg_token", data.token);
+    localStorage.setItem("phg_user", JSON.stringify(data.user));
+    setUser(data.user);
+  };
 
   const logout = () => {
-    setUser(null)
-    localStorage.removeItem(LS_KEY)
-  }
+    localStorage.removeItem("phg_token");
+    localStorage.removeItem("phg_user");
+    setUser(null);
+  };
 
-  const value = useMemo(() => ({ user, login, logout }), [user])
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <Ctx.Provider value={{ user, login, logout }}>{children}</Ctx.Provider>;
 }
 
-export function useAuth() {
-  const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider")
-  return ctx
-}
+export const useAuth = () => useContext(Ctx);

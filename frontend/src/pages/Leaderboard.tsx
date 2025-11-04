@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { fadeIn, stagger, fieldFade, formStagger } from "../lib/anim";
 import { api } from "../lib/api";
@@ -27,13 +27,10 @@ const Medal = ({ pos }: { pos: number }) => {
   return <span className="text-gray-400">#{pos}</span>;
 };
 
-// Fallback: build an events list from whatever results we have
 function deriveEventsFrom(results: Result[]): Event[] {
-  const map = new Map<string, string>();
-  results.forEach((r) => {
-    if (!map.has(r.eventId)) map.set(r.eventId, r.eventName || r.eventId);
-  });
-  return Array.from(map.entries()).map(([id, name]) => ({ _id: id, name }));
+  const m = new Map<string, string>();
+  for (const r of results) if (!m.has(r.eventId)) m.set(r.eventId, r.eventName || r.eventId);
+  return Array.from(m, ([id, name]) => ({ _id: id, name }));
 }
 
 export default function Leaderboard() {
@@ -49,16 +46,9 @@ export default function Leaderboard() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
-  // modal state
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState<{
-    athlete: string;
-    club?: string;
-    eventId: string;
-    position: number;
-    score: number;
-  }>({
+  const [form, setForm] = useState({
     athlete: "",
     club: "",
     eventId: "",
@@ -66,58 +56,53 @@ export default function Leaderboard() {
     score: 0,
   });
 
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      setErr(null);
-
-      try {
-        // Fetch from your API (no demo seeds)
-        const [evRes, resRes] = await Promise.all([
-          api.get<Event[]>("/events"),
-          api.get<Result[]>("/results"),
-        ]);
-
-        setEvents(evRes.data || []);
-        setResults(resRes.data || []);
-
-        // Keep a tiny cache so page still renders if API blips on refresh
-        localStorage.setItem(LS_EVENTS, JSON.stringify(evRes.data || []));
-        localStorage.setItem(LS_RESULTS, JSON.stringify(resRes.data || []));
-      } catch (e) {
-        // API failed — try cache, else show empty + error message
-        const cachedRes = localStorage.getItem(LS_RESULTS);
-        const cachedEv = localStorage.getItem(LS_EVENTS);
-
-        if (cachedRes) setResults(JSON.parse(cachedRes));
-        if (cachedEv) setEvents(JSON.parse(cachedEv));
-        if (!cachedRes && !cachedEv) {
-          setResults([]);
-          setEvents([]);
-        }
-        setErr("Could not load latest results. Showing whatever is available.");
-      } finally {
-        setLoading(false);
+  const fetchAll = useCallback(async () => {
+    setLoading(true);
+    setErr(null);
+    try {
+      const [evRes, resRes] = await Promise.all([api.get<Event[]>("/events"), api.get<Result[]>("/results")]);
+      const ev = evRes.data || [];
+      const rs = resRes.data || [];
+      setEvents(ev);
+      setResults(rs);
+      localStorage.setItem(LS_EVENTS, JSON.stringify(ev));
+      localStorage.setItem(LS_RESULTS, JSON.stringify(rs));
+    } catch {
+      const rs = localStorage.getItem(LS_RESULTS);
+      const ev = localStorage.getItem(LS_EVENTS);
+      if (ev) setEvents(JSON.parse(ev));
+      if (rs) setResults(JSON.parse(rs));
+      if (!ev && !rs) {
+        setEvents([]);
+        setResults([]);
       }
-    })();
+      setErr("Could not load latest results. Showing whatever is available.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchAll();
+  }, [fetchAll]);
+
+  useEffect(() => {
+    setQ("");
+  }, [eventId]);
 
   const filtered = useMemo(() => {
     let r = results;
     if (eventId !== "all") r = r.filter((x) => x.eventId === eventId);
     if (q.trim()) {
       const t = q.toLowerCase();
-      r = r.filter(
-        (x) => x.athlete.toLowerCase().includes(t) || x.eventName.toLowerCase().includes(t)
-      );
+      r = r.filter((x) => x.athlete.toLowerCase().includes(t) || x.eventName.toLowerCase().includes(t));
     }
-    r = [...r].sort((a, b) => {
-      const dir = sortDir === "asc" ? 1 : -1;
+    const dir = sortDir === "asc" ? 1 : -1;
+    return [...r].sort((a, b) => {
       if (sortKey === "athlete") return a.athlete.localeCompare(b.athlete) * dir;
       if (sortKey === "score") return (a.score - b.score) * dir;
       return (a.position - b.position) * dir;
     });
-    return r;
   }, [results, eventId, q, sortKey, sortDir]);
 
   const toggleSort = (key: typeof sortKey) => {
@@ -128,41 +113,35 @@ export default function Leaderboard() {
     }
   };
 
-  // Delete (admin only) — optimistic UI + API call
   const deleteResult = async (id: string) => {
     const record = results.find((r) => r._id === id);
     const label = record ? `${record.athlete} – ${record.eventName}` : "this result";
     if (!confirm(`Delete ${label}? This cannot be undone.`)) return;
-
     setResults((prev) => {
       const next = prev.filter((r) => r._id !== id);
       localStorage.setItem(LS_RESULTS, JSON.stringify(next));
       return next;
     });
-
     try {
       await api.delete(`/results/${id}`);
-    } catch {
-      // You could re-sync on next page load if needed.
-    }
+      fetchAll();
+    } catch {}
   };
 
-  // Create (admin only) — optimistic add + API call
   const submitResult = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.eventId || !form.athlete) return;
     setSaving(true);
     try {
-      const payload: Omit<Result, "_id"> = {
+      const payload = {
         athlete: form.athlete.trim(),
-        club: form.club?.trim(),
+        club: form.club.trim() || undefined,
         eventId: form.eventId,
         eventName: events.find((x) => x._id === form.eventId)?.name || "",
         position: Number(form.position),
         score: Number(form.score),
         date: new Date().toISOString(),
       };
-
       let created: Result;
       try {
         const { data } = await api.post<Result>("/results", payload);
@@ -170,28 +149,25 @@ export default function Leaderboard() {
       } catch {
         created = { _id: crypto.randomUUID(), ...payload };
       }
-
       setResults((prev) => {
         const next = [...prev, created].sort((a, b) => a.position - b.position);
         localStorage.setItem(LS_RESULTS, JSON.stringify(next));
         return next;
       });
-
-      // If events API didn't include this one, add it locally so dropdown shows it
       if (!events.find((e) => e._id === created.eventId)) {
         const updatedEvents = [...events, { _id: created.eventId, name: created.eventName }];
         setEvents(updatedEvents);
         localStorage.setItem(LS_EVENTS, JSON.stringify(updatedEvents));
       }
-
+      if (eventId !== "all" && eventId !== created.eventId) setEventId(created.eventId);
       setOpen(false);
       setForm({ athlete: "", club: "", eventId: "", position: 1, score: 0 });
+      fetchAll();
     } finally {
       setSaving(false);
     }
   };
 
-  // If events list is empty but we have results (e.g., events API down), derive a dropdown list from results
   const effectiveEvents = events.length === 0 && results.length > 0 ? deriveEventsFrom(results) : events;
 
   return (
@@ -202,7 +178,6 @@ export default function Leaderboard() {
           <p className="lead mt-2 text-gray-600">Live results across events. Filter, search and sort.</p>
           {err && <p className="mt-2 rounded bg-yellow-50 p-2 text-sm text-yellow-800">{err}</p>}
         </div>
-
         {isAdmin && (
           <button onClick={() => setOpen(true)} className="btn-primary">
             Add result
@@ -210,7 +185,6 @@ export default function Leaderboard() {
         )}
       </motion.div>
 
-      {/* Controls */}
       <motion.div variants={fadeIn} initial="hidden" animate="visible" className="mb-4 flex flex-col gap-3 md:flex-row md:items-center">
         <select
           value={eventId}
@@ -232,9 +206,7 @@ export default function Leaderboard() {
         />
       </motion.div>
 
-      {/* Table / Cards */}
       <div className="rounded-2xl border bg-white shadow-soft overflow-hidden">
-        {/* Desktop table */}
         <div className="hidden md:block">
           <div className="grid grid-cols-12 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700">
             <button onClick={() => toggleSort("position")} className="text-left col-span-2">Place</button>
@@ -247,9 +219,18 @@ export default function Leaderboard() {
           {loading ? (
             <div className="p-6 text-gray-500">Loading…</div>
           ) : (
-            <motion.div variants={stagger} initial="hidden" animate="visible">
+            <motion.div
+              key={`${eventId}|${q}|${sortKey}|${sortDir}|${results.length}`}
+              variants={stagger}
+              initial="hidden"
+              animate="visible"
+            >
               {filtered.map((r) => (
-                <motion.div key={r._id} variants={fieldFade} className="grid grid-cols-12 items-center border-t px-4 py-3 hover:bg-gray-50">
+                <motion.div
+                  key={r._id}
+                  variants={fieldFade}
+                  className="grid grid-cols-12 items-center border-t px-4 py-3 hover:bg-gray-50 min-h-[64px]"
+                >
                   <div className="col-span-2 font-medium"><Medal pos={r.position} /></div>
                   <div className="col-span-5">
                     <div className="font-medium text-gray-900">{r.athlete}</div>
@@ -275,14 +256,18 @@ export default function Leaderboard() {
           )}
         </div>
 
-        {/* Mobile cards */}
         <div className="md:hidden divide-y">
           {loading ? (
             <div className="p-4 text-gray-500">Loading…</div>
           ) : filtered.length === 0 ? (
             <div className="p-4 text-center text-gray-500">No results</div>
           ) : (
-            <motion.div variants={stagger} initial="hidden" animate="visible">
+            <motion.div
+              key={`${eventId}|${q}|m|${results.length}`}
+              variants={stagger}
+              initial="hidden"
+              animate="visible"
+            >
               {filtered.map((r) => (
                 <motion.div key={r._id} variants={fieldFade} className="p-4 relative">
                   {isAdmin && (
@@ -309,7 +294,6 @@ export default function Leaderboard() {
         </div>
       </div>
 
-      {/* Admin modal */}
       {open && isAdmin && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <motion.div variants={fadeIn} initial="hidden" animate="visible" className="w-full max-w-lg rounded-2xl border bg-white p-6 shadow-soft">
@@ -328,7 +312,7 @@ export default function Leaderboard() {
                   required
                 >
                   <option value="">Select event</option>
-                  {effectiveEvents.map((ev) => (
+                  {(events.length ? events : effectiveEvents).map((ev) => (
                     <option key={ev._id} value={ev._id}>
                       {ev.name}
                     </option>
