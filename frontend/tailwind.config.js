@@ -41,7 +41,7 @@ export default {
         "hero-gradient": "linear-gradient(to bottom, #e8f9f0 0%, #ffffff 70%)",
 
         "hero-gradient-dark":
-          "linear-gradient(to bottom, #0f1715 0%, #0e2e2cff 40%, #057858c4 100%)",
+          "linear-gradient(to bottom, #06524593 0%, #0e2e2cff 40%, #060e0bc4 100%)",
       },
     },
   },
