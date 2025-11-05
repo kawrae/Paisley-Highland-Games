@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { api } from "../lib/api";
 import { fadeIn, formStagger, fieldFade } from "../lib/anim";
@@ -15,6 +15,8 @@ type Reg = {
   createdAt: string;
 };
 
+const LS_REGS = "phg_regs_cache";
+
 export default function AdminRegistrations() {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
@@ -24,23 +26,30 @@ export default function AdminRegistrations() {
   const [err, setErr] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected">("pending");
   const [q, setQ] = useState("");
+  // bump when we want to force the list to remount/animate
+  const [version, setVersion] = useState(0);
+
+  const fetchAll = useCallback(async () => {
+    setLoading(true);
+    setErr(null);
+    try {
+      const { data } = await api.get<Reg[]>("/registrations");
+      setRows(data);
+      localStorage.setItem(LS_REGS, JSON.stringify(data));
+    } catch {
+      const cached = localStorage.getItem(LS_REGS);
+      if (cached) setRows(JSON.parse(cached));
+      else setErr("Could not load registrations.");
+    } finally {
+      setLoading(false);
+      setVersion(v => v + 1); // ensure remount after load cycles
+    }
+  }, []);
 
   useEffect(() => {
-    let mounted = true;
-    (async () => {
-      setLoading(true);
-      setErr(null);
-      try {
-        const { data } = await api.get<Reg[]>("/registrations");
-        if (mounted) setRows(data);
-      } catch {
-        if (mounted) setErr("Could not load registrations.");
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
-    return () => { mounted = false; };
-  }, []);
+    if (!isAdmin) return;
+    fetchAll();
+  }, [isAdmin, fetchAll]);
 
   const filtered = useMemo(() => {
     let r = rows;
@@ -59,21 +68,30 @@ export default function AdminRegistrations() {
 
   const updateStatus = async (id: string, status: Reg["status"]) => {
     const prev = rows;
-    setRows(s => s.map(r => r.id === id ? { ...r, status } : r));
+    // optimistic
+    setRows(s => s.map(r => (r.id === id ? { ...r, status } : r)));
+    setVersion(v => v + 1);
     try {
       await api.patch(`/registrations/${id}`, { status });
+      // refresh from server for truth
+      fetchAll();
     } catch {
       setRows(prev);
+      setVersion(v => v + 1);
     }
   };
 
   const remove = async (id: string) => {
     const prev = rows;
+    // optimistic
     setRows(s => s.filter(r => r.id !== id));
+    setVersion(v => v + 1);
     try {
       await api.delete(`/registrations/${id}`);
+      fetchAll();
     } catch {
       setRows(prev);
+      setVersion(v => v + 1);
     }
   };
 
@@ -98,7 +116,7 @@ export default function AdminRegistrations() {
           {(["pending","approved","rejected","all"] as const).map(key => (
             <button
               key={key}
-              onClick={() => setFilter(key)}
+              onClick={() => { setFilter(key); setVersion(v => v + 1); }}
               className={`px-3 py-1 rounded-md text-sm ${filter === key ? "bg-highland-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
             >
               {key[0].toUpperCase()+key.slice(1)}
@@ -107,7 +125,7 @@ export default function AdminRegistrations() {
         </div>
         <input
           value={q}
-          onChange={(e)=>setQ(e.target.value)}
+          onChange={(e)=>{ setQ(e.target.value); setVersion(v => v + 1); }}
           placeholder="Search name, email or event…"
           className="w-full md:w-72 rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-highland-300"
         />
@@ -127,9 +145,15 @@ export default function AdminRegistrations() {
         ) : filtered.length === 0 ? (
           <div className="p-6 text-gray-500">No registrations</div>
         ) : (
-          <motion.div variants={formStagger} initial="hidden" animate="visible">
+          // Force remount when filter/query/rows change to avoid any blank-frame glitch
+          <motion.div
+            key={`${filter}|${q}|${version}`}
+            variants={formStagger}
+            initial="hidden"
+            animate="visible"
+          >
             {filtered.map(r => (
-              <motion.div key={r.id} variants={fieldFade} className="grid grid-cols-12 items-center border-t px-4 py-3">
+              <motion.div key={r.id} variants={fieldFade} className="grid grid-cols-12 items-center border-t px-4 py-3 min-h-[64px]">
                 <div className="col-span-3 font-medium">{r.firstName} {r.lastName}</div>
                 <div className="col-span-3 text-gray-700">{r.email}</div>
                 <div className="col-span-3 text-gray-700">{r.eventName}</div>
