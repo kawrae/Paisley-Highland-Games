@@ -50,26 +50,50 @@ export default function Home() {
           {[
             {
               title: "Caber Toss",
-              desc: "The classic test of strength and control.",
+              desc: "A legendary display of strength where athletes flip massive wooden poles end-over-end. One of the most iconic Highland challenges.",
+              img: "/images/caber-toss.jpg",
+              link: "/events#caber",
             },
-            { title: "Tug o’ War", desc: "Teams compete in a battle of grit." },
-            { title: "Stone Put", desc: "Traditional precursor to shot put." },
+            {
+              title: "Tug o’ War",
+              desc: "Teams of eight face off in a contest of teamwork, balance, and sheer determination. A festival favourite for all ages.",
+              img: "/images/tug-of-war.jpg",
+              link: "/events#tug",
+            },
+            {
+              title: "Stone Put",
+              desc: "Scotland’s ancient answer to the shot put — athletes launch a heavy stone for distance using raw technique and power.",
+              img: "/images/stone-put.jpg",
+              link: "/events#stone",
+            },
           ].map((c) => (
             <motion.div
               key={c.title}
               variants={fadeIn}
-              className="rounded-2xl border bg-white p-6 shadow-soft
-                         hover:-translate-y-0.5 hover:shadow-lg transition
-                         dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.995 }}
+              whileHover={{ scale: 1.03 }}
+              className="group overflow-hidden rounded-2xl border bg-white shadow-soft hover:shadow-lg transition dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
             >
-              <h3 className="text-lg font-semibold text-highland-800 dark:text-dark-heading">
-                {c.title}
-              </h3>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                {c.desc}
-              </p>
+              <div className="h-40 overflow-hidden">
+                <img
+                  src={c.img}
+                  alt={c.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-highland-800 dark:text-dark-heading">
+                  {c.title}
+                </h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                  {c.desc}
+                </p>
+                <Link
+                  to={c.link}
+                  className="mt-4 inline-block text-sm text-highland-700 font-medium hover:underline"
+                >
+                  Learn more →
+                </Link>
+              </div>
             </motion.div>
           ))}
         </motion.div>
