@@ -12,6 +12,7 @@ backend/dist/
 # Environment and secrets
 .env
 *.env
+env.local
 backend/.env
 frontend/.env
 
