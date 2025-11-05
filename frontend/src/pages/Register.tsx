@@ -35,24 +35,9 @@ export default function Register() {
         setEvents(res.data);
       } catch {
         setEvents([
-          {
-            _id: "caber",
-            name: "Caber Toss",
-            date: new Date().toISOString(),
-            location: "Paisley",
-          },
-          {
-            _id: "tug",
-            name: "Tug o’ War",
-            date: new Date().toISOString(),
-            location: "Paisley",
-          },
-          {
-            _id: "stone",
-            name: "Stone Put",
-            date: new Date().toISOString(),
-            location: "Paisley",
-          },
+          { _id: "caber", name: "Caber Toss", date: new Date().toISOString(), location: "Paisley" },
+          { _id: "tug", name: "Tug o’ War",  date: new Date().toISOString(), location: "Paisley" },
+          { _id: "stone", name: "Stone Put", date: new Date().toISOString(), location: "Paisley" },
         ]);
       }
     })();
@@ -87,7 +72,10 @@ export default function Register() {
         >
           <h2 className="h2 mb-2">Registration received</h2>
           <p className="text-gray-600">We’ll email you with details.</p>
-          <button onClick={() => setOk(false)} className="btn-primary mt-6">
+          <button
+            onClick={() => setOk(false)}
+            className="btn-primary mt-6"
+          >
             Register another competitor
           </button>
         </motion.div>
@@ -97,10 +85,12 @@ export default function Register() {
 
   return (
     <section className="container-page section">
+      {/* KEY forces remount so the animation/state resets when leaving success view */}
       <motion.div
+        key={ok ? "ok" : "form"}
+        variants={fadeIn}
         initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.25 }}
+        animate="visible"
         className="mx-auto max-w-5xl overflow-hidden rounded-2xl border bg-white shadow-soft"
       >
         <div className="grid md:grid-cols-2">
@@ -119,9 +109,7 @@ export default function Register() {
               className="space-y-4"
             >
               <motion.div variants={fieldFade}>
-                <label className="mb-1 block text-sm font-medium">
-                  First name
-                </label>
+                <label className="mb-1 block text-sm font-medium">First name</label>
                 <input
                   {...register("firstName")}
                   className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
@@ -130,9 +118,7 @@ export default function Register() {
               </motion.div>
 
               <motion.div variants={fieldFade}>
-                <label className="mb-1 block text-sm font-medium">
-                  Last name
-                </label>
+                <label className="mb-1 block text-sm font-medium">Last name</label>
                 <input
                   {...register("lastName")}
                   className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
@@ -163,9 +149,7 @@ export default function Register() {
                     </option>
                   ))}
                 </select>
-                <FieldError
-                  msg={errors.eventId ? "Choose an event" : undefined}
-                />
+                <FieldError msg={errors.eventId ? "Choose an event" : undefined} />
               </motion.div>
 
               <motion.div variants={fieldFade}>
@@ -179,10 +163,7 @@ export default function Register() {
             </motion.form>
           </motion.div>
 
-          <motion.div
-            variants={slideR}
-            className="relative hidden md:block overflow-hidden"
-          >
+          <motion.div variants={slideR} className="relative hidden md:block overflow-hidden">
             <motion.img
               variants={kenBurns}
               src="/images/competitor.jpg"
