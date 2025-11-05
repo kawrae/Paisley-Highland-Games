@@ -8,6 +8,9 @@ import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
 import "leaflet/dist/leaflet.css";
 import Events from "./pages/Events";
+import CaberToss from "./pages/CaberToss";
+import TugOWar from "./pages/tugoWar";
+import StonePut from "./pages/stonePut";
 
 export default function App() {
   return (
@@ -21,6 +24,9 @@ export default function App() {
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/events/caber" element={<CaberToss />} />
+          <Route path="/events/tugowar" element={<TugOWar />} />
+          <Route path="/events/stone" element={<StonePut />} />
         </Routes>
       </main>
       <Footer />

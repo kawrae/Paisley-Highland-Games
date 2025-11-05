@@ -1,3 +1,4 @@
+// EventMap.tsx
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -5,7 +6,8 @@ import { useTheme } from "../lib/theme";
 
 const icon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -15,12 +17,26 @@ const icon = L.icon({
 
 const center: [number, number] = [55.8466, -4.4237];
 const spots = [
-  { id: "caber", name: "Caber Toss Arena", pos: [55.8466, -4.4237] as [number, number] },
-  { id: "tug", name: "Tug o’ War Field", pos: [55.8459, -4.4218] as [number, number] },
-  { id: "stone", name: "Stone Put Circle", pos: [55.8472, -4.4252] as [number, number] },
+  {
+    id: "caber",
+    name: "Caber Toss Arena",
+    pos: [55.8466, -4.4237] as [number, number],
+  },
+  {
+    id: "tug",
+    name: "Tug o’ War Field",
+    pos: [55.8459, -4.4218] as [number, number],
+  },
+  {
+    id: "stone",
+    name: "Stone Put Circle",
+    pos: [55.8472, -4.4252] as [number, number],
+  },
 ];
 
-export default function EventMap() {
+type Props = { focusId?: "caber" | "tug" | "stone"; zoomLevel?: number };
+
+export default function EventMap({ focusId, zoomLevel = 15 }: Props) {
   const { theme } = useTheme();
   const dark = theme === "dark";
   const url = dark
@@ -30,16 +46,15 @@ export default function EventMap() {
     ? '&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; OpenStreetMap'
     : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
+  const selected = focusId ? spots.find((s) => s.id === focusId) : null;
+  const displaySpots = selected ? [selected] : spots;
+  const mapCenter = selected ? selected.pos : center;
+
   return (
-    <div
-      className="
-        rounded-2xl border bg-white shadow-soft overflow-hidden
-        dark:bg-dark-card dark:border-dark-border dark:shadow-softDark
-      "
-    >
+    <div className="rounded-2xl border bg-white shadow-soft overflow-hidden dark:bg-dark-card dark:border-dark-border dark:shadow-softDark">
       <MapContainer
-        center={center}
-        zoom={15}
+        center={mapCenter}
+        zoom={zoomLevel}
         className="leaflet-map"
         style={{
           height: 420,
@@ -49,33 +64,17 @@ export default function EventMap() {
         }}
       >
         <TileLayer url={url} attribution={attribution} />
-        {spots.map((s) => (
+        {displaySpots.map((s) => (
           <Marker key={s.id} position={s.pos} icon={icon}>
             <Popup>{s.name}</Popup>
           </Marker>
         ))}
       </MapContainer>
-
-      <style>
-        {`
-          /* Force Leaflet container to blend with dark theme */
-          .leaflet-map,
-          .leaflet-container {
-            background: transparent !important;
-            border: none !important;
-          }
-
-          /* Optional: make the zoom buttons darker in dark mode */
-          .dark .leaflet-control-container .leaflet-bar a {
-            background: #0f1917;
-            color: #cde9de;
-            border-color: #2a3733;
-          }
-          .dark .leaflet-control-container .leaflet-bar a:hover {
-            background: #14211e;
-          }
-        `}
-      </style>
+      <style>{`
+        .leaflet-map,.leaflet-container{background:transparent!important;border:none!important}
+        .dark .leaflet-control-container .leaflet-bar a{background:#0f1917;color:#cde9de;border-color:#2a3733}
+        .dark .leaflet-control-container .leaflet-bar a:hover{background:#14211e}
+      `}</style>
     </div>
   );
 }
