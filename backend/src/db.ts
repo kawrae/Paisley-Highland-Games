@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
 
-const db = new Database("data.sqlite");
+const db = new Database(process.env.DB_FILE || "data.sqlite");
 
 // Enforce FKs
 db.pragma("foreign_keys = ON");
