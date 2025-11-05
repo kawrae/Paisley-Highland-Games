@@ -6,6 +6,8 @@ import Register from "./pages/Register";
 import AdminRegistrations from "./pages/AdminRegistrations";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
+import "leaflet/dist/leaflet.css";
+import Events from "./pages/Events";
 
 export default function App() {
   return (
@@ -18,6 +20,7 @@ export default function App() {
           <Route path="/admin/registrations" element={<AdminRegistrations />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/events" element={<Events />} />
         </Routes>
       </main>
       <Footer />
