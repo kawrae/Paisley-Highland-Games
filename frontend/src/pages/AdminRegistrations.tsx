@@ -24,9 +24,7 @@ export default function AdminRegistrations() {
   const [rows, setRows] = useState<Reg[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-  const [filter, setFilter] = useState<
-    "all" | "pending" | "approved" | "rejected"
-  >("pending");
+  const [filter, setFilter] = useState<"all" | "pending" | "approved" | "rejected">("pending");
   const [q, setQ] = useState("");
   const [version, setVersion] = useState(0);
 
@@ -97,7 +95,8 @@ export default function AdminRegistrations() {
   if (!isAdmin) {
     return (
       <section className="container-page section">
-        <div className="rounded-2xl border bg-white p-6 shadow-soft">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-soft
+                        dark:border-dark-border dark:bg-dark-card dark:shadow-softDark">
           Admins only.
         </div>
       </section>
@@ -106,38 +105,41 @@ export default function AdminRegistrations() {
 
   return (
     <section className="container-page section">
-      <motion.div
-        variants={fadeIn}
-        initial="hidden"
-        animate="visible"
-        className="mb-6"
-      >
+      <motion.div variants={fadeIn} initial="hidden" animate="visible" className="mb-6">
         <h1 className="h2">Registrations</h1>
-        <p className="lead mt-2 text-gray-600">
-          Review, approve, or reject competitor registrations.
-        </p>
+        <p className="lead mt-2">Review, approve, or reject competitor registrations.</p>
         {err && (
-          <p className="mt-2 rounded bg-red-50 p-2 text-sm text-red-700">
+          <p className="mt-2 rounded bg-red-50 p-2 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
             {err}
           </p>
         )}
       </motion.div>
 
+      {/* Controls */}
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center">
-        <div className="inline-flex rounded-lg border bg-white p-1">
-          {(["pending", "approved", "rejected", "all"] as const).map((key) => (
-            <button
-              key={key}
-              onClick={() => {
-                setFilter(key);
-                setVersion((v) => v + 1);
-              }}
-              className={`px-3 py-1 rounded-md text-sm ${filter === key ? "bg-highland-600 text-white" : "text-gray-700 hover:bg-gray-100"}`}
-            >
-              {key[0].toUpperCase() + key.slice(1)}
-            </button>
-          ))}
+        {/* Filter group */}
+        <div className="inline-flex rounded-lg border p-1 bg-white dark:bg-dark-card dark:border-dark-border">
+          {(["pending", "approved", "rejected", "all"] as const).map((key) => {
+            const active =
+              filter === key
+                ? "bg-highland-600 text-white dark:bg-dark-accent dark:text-white"
+                : "text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-[#202823]";
+            return (
+              <button
+                key={key}
+                onClick={() => {
+                  setFilter(key);
+                  setVersion((v) => v + 1);
+                }}
+                className={`px-3 py-1 rounded-md text-sm transition-colors ${active}`}
+              >
+                {key[0].toUpperCase() + key.slice(1)}
+              </button>
+            );
+          })}
         </div>
+
+        {/* Search */}
         <input
           value={q}
           onChange={(e) => {
@@ -145,12 +147,26 @@ export default function AdminRegistrations() {
             setVersion((v) => v + 1);
           }}
           placeholder="Search name, email or event…"
-          className="w-full md:w-72 rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-highland-300"
+          className="input w-full md:w-72"
         />
       </div>
 
-      <div className="rounded-2xl border bg-white shadow-soft overflow-hidden">
-        <div className="hidden md:grid grid-cols-12 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700">
+      {/* Table card (force consistent surface) */}
+      <div
+        className="
+          overflow-hidden
+          rounded-2xl border border-gray-200 bg-white shadow-soft
+          dark:border-dark-border dark:bg-dark-card dark:shadow-softDark
+        "
+      >
+        {/* Card header strip */}
+        <div
+          className="
+            hidden md:grid grid-cols-12 px-4 py-3 text-sm font-semibold
+            bg-gray-50 border-b border-gray-200
+            dark:bg-[#141916] dark:border-dark-border
+          "
+        >
           <div className="col-span-3">Competitor</div>
           <div className="col-span-3">Email</div>
           <div className="col-span-3">Event</div>
@@ -159,9 +175,9 @@ export default function AdminRegistrations() {
         </div>
 
         {loading ? (
-          <div className="p-6 text-gray-500">Loading…</div>
+          <div className="p-6 text-gray-500 dark:text-gray-400">Loading…</div>
         ) : filtered.length === 0 ? (
-          <div className="p-6 text-gray-500">No registrations</div>
+          <div className="p-6 text-gray-500 dark:text-gray-400">No registrations</div>
         ) : (
           <motion.div
             key={`${filter}|${q}|${version}`}
@@ -174,10 +190,10 @@ export default function AdminRegistrations() {
                 <span
                   className={
                     r.status === "approved"
-                      ? "rounded px-2 py-1 text-xs font-semibold bg-green-100 text-green-700"
+                      ? "badge bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300"
                       : r.status === "rejected"
-                        ? "rounded px-2 py-1 text-xs font-semibold bg-red-100 text-red-700"
-                        : "rounded px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-700"
+                      ? "badge bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300"
+                      : "badge bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300"
                   }
                 >
                   {r.status}
@@ -188,7 +204,12 @@ export default function AdminRegistrations() {
                 <motion.div
                   key={r.id}
                   variants={fieldFade}
-                  className="border-t px-4 py-3 md:grid md:grid-cols-12 md:items-center flex flex-col gap-2 min-w-0"
+                  className="
+                    border-t border-gray-200 px-4 py-3
+                    md:grid md:grid-cols-12 md:items-center
+                    flex flex-col gap-2 min-w-0 row-hover
+                    dark:border-dark-border
+                  "
                 >
                   <div className="md:col-span-3 w-full md:w-auto flex items-start justify-between gap-3">
                     <div className="font-medium truncate">
@@ -198,26 +219,24 @@ export default function AdminRegistrations() {
                   </div>
 
                   <div className="md:col-span-3 w-full md:w-auto min-w-0">
-                    <div className="text-gray-700 whitespace-nowrap truncate">
+                    <div className="text-gray-700 dark:text-gray-200 whitespace-nowrap truncate">
                       {r.email}
                     </div>
                   </div>
 
                   <div className="md:col-span-3 w-full md:w-auto min-w-0">
-                    <div className="text-gray-700 whitespace-nowrap truncate">
+                    <div className="text-gray-700 dark:text-gray-200 whitespace-nowrap truncate">
                       {r.eventName}
                     </div>
                   </div>
 
-                  <div className="md:col-span-2 hidden md:block">
-                    {StatusPill}
-                  </div>
+                  <div className="md:col-span-2 hidden md:block">{StatusPill}</div>
 
                   <div className="md:col-span-1 w-full md:w-auto md:text-right flex md:justify-end gap-2">
                     {r.status !== "approved" && (
                       <button
                         onClick={() => updateStatus(r.id, "approved")}
-                        className="rounded-md px-2 py-1 text-sm text-green-700 hover:bg-green-50"
+                        className="rounded-md px-2 py-1 text-sm text-green-700 hover:bg-green-50 dark:text-green-300 dark:hover:bg-green-900/20"
                       >
                         Approve
                       </button>
@@ -225,14 +244,14 @@ export default function AdminRegistrations() {
                     {r.status !== "rejected" && (
                       <button
                         onClick={() => updateStatus(r.id, "rejected")}
-                        className="rounded-md px-2 py-1 text-sm text-red-700 hover:bg-red-50"
+                        className="rounded-md px-2 py-1 text-sm text-red-700 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-900/20"
                       >
                         Reject
                       </button>
                     )}
                     <button
                       onClick={() => remove(r.id)}
-                      className="rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-100"
+                      className="rounded-md px-2 py-1 text-sm text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-[#202823]"
                     >
                       Delete
                     </button>

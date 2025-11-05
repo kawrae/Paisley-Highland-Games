@@ -35,9 +35,24 @@ export default function Register() {
         setEvents(res.data);
       } catch {
         setEvents([
-          { _id: "caber", name: "Caber Toss", date: new Date().toISOString(), location: "Paisley" },
-          { _id: "tug", name: "Tug o’ War",  date: new Date().toISOString(), location: "Paisley" },
-          { _id: "stone", name: "Stone Put", date: new Date().toISOString(), location: "Paisley" },
+          {
+            _id: "caber",
+            name: "Caber Toss",
+            date: new Date().toISOString(),
+            location: "Paisley",
+          },
+          {
+            _id: "tug",
+            name: "Tug o’ War",
+            date: new Date().toISOString(),
+            location: "Paisley",
+          },
+          {
+            _id: "stone",
+            name: "Stone Put",
+            date: new Date().toISOString(),
+            location: "Paisley",
+          },
         ]);
       }
     })();
@@ -68,14 +83,14 @@ export default function Register() {
           variants={fadeIn}
           initial="hidden"
           animate="visible"
-          className="max-w-xl mx-auto rounded-2xl border bg-white p-6 shadow-soft text-center"
+          className="max-w-xl mx-auto rounded-2xl border bg-white p-6 shadow-soft text-center
+                     dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
         >
           <h2 className="h2 mb-2">Registration received</h2>
-          <p className="text-gray-600">We’ll email you with details.</p>
-          <button
-            onClick={() => setOk(false)}
-            className="btn-primary mt-6"
-          >
+          <p className="text-gray-600 dark:text-gray-300">
+            We’ll email you with details.
+          </p>
+          <button onClick={() => setOk(false)} className="btn-primary mt-6">
             Register another competitor
           </button>
         </motion.div>
@@ -85,19 +100,19 @@ export default function Register() {
 
   return (
     <section className="container-page section">
-      {/* KEY forces remount so the animation/state resets when leaving success view */}
       <motion.div
         key={ok ? "ok" : "form"}
         variants={fadeIn}
         initial="hidden"
         animate="visible"
-        className="mx-auto max-w-5xl overflow-hidden rounded-2xl border bg-white shadow-soft"
+        className="mx-auto max-w-5xl overflow-hidden rounded-2xl border bg-white shadow-soft
+                   dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
       >
         <div className="grid md:grid-cols-2">
           <motion.div variants={slideL} className="p-6 md:p-8">
             <h1 className="h2 mb-6">Competitor Registration</h1>
             {err && (
-              <p className="mb-4 rounded bg-red-50 p-3 text-sm text-red-700">
+              <p className="mb-4 rounded bg-red-50 p-3 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-200">
                 {err}
               </p>
             )}
@@ -109,19 +124,25 @@ export default function Register() {
               className="space-y-4"
             >
               <motion.div variants={fieldFade}>
-                <label className="mb-1 block text-sm font-medium">First name</label>
+                <label className="mb-1 block text-sm font-medium">
+                  First name
+                </label>
                 <input
                   {...register("firstName")}
-                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
+                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300
+                             dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
                 />
                 <FieldError msg={errors.firstName ? "Required" : undefined} />
               </motion.div>
 
               <motion.div variants={fieldFade}>
-                <label className="mb-1 block text-sm font-medium">Last name</label>
+                <label className="mb-1 block text-sm font-medium">
+                  Last name
+                </label>
                 <input
                   {...register("lastName")}
-                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
+                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300
+                             dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
                 />
                 <FieldError msg={errors.lastName ? "Required" : undefined} />
               </motion.div>
@@ -131,7 +152,8 @@ export default function Register() {
                 <input
                   type="email"
                   {...register("email")}
-                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
+                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300
+                             dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
                 />
                 <FieldError msg={errors.email ? "Invalid email" : undefined} />
               </motion.div>
@@ -140,7 +162,8 @@ export default function Register() {
                 <label className="mb-1 block text-sm font-medium">Event</label>
                 <select
                   {...register("eventId")}
-                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
+                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300
+                             dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
                 >
                   <option value="">Select an event</option>
                   {events.map((e) => (
@@ -149,7 +172,9 @@ export default function Register() {
                     </option>
                   ))}
                 </select>
-                <FieldError msg={errors.eventId ? "Choose an event" : undefined} />
+                <FieldError
+                  msg={errors.eventId ? "Choose an event" : undefined}
+                />
               </motion.div>
 
               <motion.div variants={fieldFade}>
@@ -163,7 +188,10 @@ export default function Register() {
             </motion.form>
           </motion.div>
 
-          <motion.div variants={slideR} className="relative hidden md:block overflow-hidden">
+          <motion.div
+            variants={slideR}
+            className="relative hidden md:block overflow-hidden"
+          >
             <motion.img
               variants={kenBurns}
               src="/images/competitor.jpg"

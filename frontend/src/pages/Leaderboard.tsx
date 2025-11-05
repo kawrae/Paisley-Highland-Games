@@ -24,7 +24,7 @@ const Medal = ({ pos }: { pos: number }) => {
   if (pos === 1) return <span title="1st">🥇</span>;
   if (pos === 2) return <span title="2nd">🥈</span>;
   if (pos === 3) return <span title="3rd">🥉</span>;
-  return <span className="text-gray-400">#{pos}</span>;
+  return <span className="text-gray-400 dark:text-gray-500">#{pos}</span>;
 };
 
 function deriveEventsFrom(results: Result[]): Event[] {
@@ -54,7 +54,7 @@ export default function Leaderboard() {
     club: "",
     eventId: "",
     position: 1,
-    score: 0,
+    score: 0
   });
 
   // Delete-result modal
@@ -119,20 +119,18 @@ export default function Leaderboard() {
     }
   };
 
-  // Open the delete modal with the selected record
   const askDelete = (id: string) => {
     const rec = results.find((r) => r._id === id) || null;
     setDelTarget(rec);
     setDelOpen(true);
   };
 
-  // Confirm delete
   const confirmDelete = async () => {
     if (!delTarget) return;
     setDeleting(true);
-
-    // optimistic update
     const id = delTarget._id;
+
+    // optimistic
     setResults((prev) => {
       const next = prev.filter((r) => r._id !== id);
       localStorage.setItem(LS_RESULTS, JSON.stringify(next));
@@ -161,7 +159,7 @@ export default function Leaderboard() {
         eventName: events.find((x) => x._id === form.eventId)?.name || "",
         position: Number(form.position),
         score: Number(form.score),
-        date: new Date().toISOString(),
+        date: new Date().toISOString()
       };
       let created: Result;
       try {
@@ -196,8 +194,12 @@ export default function Leaderboard() {
       <motion.div variants={fadeIn} initial="hidden" animate="visible" className="mb-6 flex items-end justify-between gap-3">
         <div>
           <h1 className="h2">Leaderboard</h1>
-          <p className="lead mt-2 text-gray-600">Live results across events. Filter, search and sort.</p>
-          {err && <p className="mt-2 rounded bg-yellow-50 p-2 text-sm text-yellow-800">{err}</p>}
+          <p className="lead mt-2">Live results across events. Filter, search and sort.</p>
+          {err && (
+            <p className="mt-2 rounded bg-yellow-50 p-2 text-sm text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-200">
+              {err}
+            </p>
+          )}
         </div>
         {isAdmin && (
           <button onClick={() => setOpen(true)} className="btn-primary">
@@ -206,11 +208,17 @@ export default function Leaderboard() {
         )}
       </motion.div>
 
-      <motion.div variants={fadeIn} initial="hidden" animate="visible" className="mb-4 flex flex-col gap-3 md:flex-row md:items-center">
+      <motion.div
+        variants={fadeIn}
+        initial="hidden"
+        animate="visible"
+        className="mb-4 flex flex-col gap-3 md:flex-row md:items-center"
+      >
         <select
           value={eventId}
           onChange={(e) => setEventId(e.target.value)}
-          className="w-full md:w-60 rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-highland-300"
+          className="w-full md:w-60 rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-highland-300
+                     dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
         >
           <option value="all">All events</option>
           {effectiveEvents.map((ev) => (
@@ -223,14 +231,17 @@ export default function Leaderboard() {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search athlete or event…"
-          className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-highland-300"
+          className="w-full rounded-lg border p-2 focus:outline-none focus:ring-2 focus:ring-highland-300
+                     dark:bg-dark-card dark:border-dark-border dark:text-dark-text placeholder:dark:text-gray-400"
         />
       </motion.div>
 
-      <div className="rounded-2xl border bg-white shadow-soft overflow-hidden">
+      <div className="rounded-2xl border bg-white shadow-soft overflow-hidden
+                      dark:bg-dark-card dark:border-dark-border dark:shadow-softDark">
         {/* Desktop */}
         <div className="hidden md:block">
-          <div className="grid grid-cols-12 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700">
+          <div className="grid grid-cols-12 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700
+                          dark:bg-[#26302c] dark:text-dark-text">
             <button onClick={() => toggleSort("position")} className="text-left col-span-2">Place</button>
             <button onClick={() => toggleSort("athlete")} className="text-left col-span-5">Athlete</button>
             <div className="col-span-3">Event</div>
@@ -239,32 +250,29 @@ export default function Leaderboard() {
           </div>
 
           {loading ? (
-            <div className="p-6 text-gray-500">Loading…</div>
+            <div className="p-6 text-gray-500 dark:text-gray-300">Loading…</div>
           ) : (
-            <motion.div
-              key={`${eventId}|${q}|${sortKey}|${sortDir}|${results.length}`}
-              variants={stagger}
-              initial="hidden"
-              animate="visible"
-            >
+            <motion.div key={`${eventId}|${q}|${sortKey}|${sortDir}|${results.length}`} variants={stagger} initial="hidden" animate="visible">
               {filtered.map((r) => (
                 <motion.div
                   key={r._id}
                   variants={fieldFade}
-                  className="grid grid-cols-12 items-center border-t px-4 py-3 hover:bg-gray-50 min-h-[64px]"
+                  className="grid grid-cols-12 items-center border-t px-4 py-3 min-h-[64px]
+                             hover:bg-gray-50 dark:hover:bg-[#26302c]
+                             dark:border-dark-border"
                 >
                   <div className="col-span-2 font-medium"><Medal pos={r.position} /></div>
                   <div className="col-span-5">
-                    <div className="font-medium text-gray-900">{r.athlete}</div>
-                    {r.club && <div className="text-sm text-gray-500">{r.club}</div>}
+                    <div className="font-medium text-gray-900 dark:text-dark-text">{r.athlete}</div>
+                    {r.club && <div className="text-sm text-gray-500 dark:text-gray-400">{r.club}</div>}
                   </div>
-                  <div className="col-span-3 text-gray-700">{r.eventName}</div>
-                  <div className={`${isAdmin ? "col-span-1" : "col-span-2"} font-semibold text-highland-800`}>{r.score}</div>
+                  <div className="col-span-3 text-gray-700 dark:text-gray-300">{r.eventName}</div>
+                  <div className={`${isAdmin ? "col-span-1" : "col-span-2"} font-semibold text-highland-800 dark:text-dark-heading`}>{r.score}</div>
                   {isAdmin && (
                     <div className="col-span-1 text-right">
                       <button
                         onClick={() => askDelete(r._id)}
-                        className="rounded-md px-2 py-1 text-sm text-red-600 hover:bg-red-50"
+                        className="rounded-md px-2 py-1 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                         title="Delete result"
                       >
                         🗑️
@@ -273,30 +281,25 @@ export default function Leaderboard() {
                   )}
                 </motion.div>
               ))}
-              {filtered.length === 0 && <div className="border-t px-4 py-8 text-center text-gray-500">No results</div>}
+              {filtered.length === 0 && <div className="border-t px-4 py-8 text-center text-gray-500 dark:text-gray-300">No results</div>}
             </motion.div>
           )}
         </div>
 
         {/* Mobile */}
-        <div className="md:hidden divide-y">
+        <div className="md:hidden divide-y dark:divide-dark-border">
           {loading ? (
-            <div className="p-4 text-gray-500">Loading…</div>
+            <div className="p-4 text-gray-500 dark:text-gray-300">Loading…</div>
           ) : filtered.length === 0 ? (
-            <div className="p-4 text-center text-gray-500">No results</div>
+            <div className="p-4 text-center text-gray-500 dark:text-gray-300">No results</div>
           ) : (
-            <motion.div
-              key={`${eventId}|${q}|m|${results.length}`}
-              variants={stagger}
-              initial="hidden"
-              animate="visible"
-            >
+            <motion.div key={`${eventId}|${q}|m|${results.length}`} variants={stagger} initial="hidden" animate="visible">
               {filtered.map((r) => (
                 <motion.div key={r._id} variants={fieldFade} className="p-4 relative">
                   {isAdmin && (
                     <button
                       onClick={() => askDelete(r._id)}
-                      className="absolute right-2 top-2 rounded-md px-2 py-1 text-sm text-red-600 hover:bg-red-50"
+                      className="absolute right-2 top-2 rounded-md px-2 py-1 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                       title="Delete result"
                     >
                       🗑️
@@ -305,10 +308,10 @@ export default function Leaderboard() {
                   <div className="flex items-center gap-3">
                     <div className="text-xl"><Medal pos={r.position} /></div>
                     <div className="flex-1">
-                      <div className="font-semibold">{r.athlete}</div>
-                      <div className="text-sm text-gray-500">{r.eventName}</div>
+                      <div className="font-semibold dark:text-dark-text">{r.athlete}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">{r.eventName}</div>
                     </div>
-                    <div className="font-semibold text-highland-800">{r.score}</div>
+                    <div className="font-semibold text-highland-800 dark:text-dark-heading">{r.score}</div>
                   </div>
                 </motion.div>
               ))}
@@ -320,10 +323,16 @@ export default function Leaderboard() {
       {/* Add Result modal */}
       {open && isAdmin && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <motion.div variants={fadeIn} initial="hidden" animate="visible" className="w-full max-w-lg rounded-2xl border bg-white p-6 shadow-soft">
+          <motion.div
+            variants={fadeIn}
+            initial="hidden"
+            animate="visible"
+            className="w-full max-w-lg rounded-2xl border bg-white p-6 shadow-soft
+                       dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+          >
             <div className="flex items-center justify-between mb-3">
               <h2 className="h2 text-lg">Add Result</h2>
-              <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-gray-700">✕</button>
+              <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-300">✕</button>
             </div>
 
             <motion.form variants={formStagger} onSubmit={submitResult} className="space-y-3">
@@ -332,7 +341,8 @@ export default function Leaderboard() {
                 <select
                   value={form.eventId}
                   onChange={(e) => setForm((f) => ({ ...f, eventId: e.target.value }))}
-                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
+                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300
+                             dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
                   required
                 >
                   <option value="">Select event</option>
@@ -349,7 +359,8 @@ export default function Leaderboard() {
                 <input
                   value={form.athlete}
                   onChange={(e) => setForm((f) => ({ ...f, athlete: e.target.value }))}
-                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
+                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300
+                             dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
                   required
                 />
               </motion.div>
@@ -359,7 +370,8 @@ export default function Leaderboard() {
                 <input
                   value={form.club}
                   onChange={(e) => setForm((f) => ({ ...f, club: e.target.value }))}
-                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
+                  className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300
+                             dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
                 />
               </motion.div>
 
@@ -371,7 +383,8 @@ export default function Leaderboard() {
                     min={1}
                     value={form.position}
                     onChange={(e) => setForm((f) => ({ ...f, position: Number(e.target.value) }))}
-                    className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
+                    className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300
+                               dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
                     required
                   />
                 </div>
@@ -382,14 +395,15 @@ export default function Leaderboard() {
                     step="0.01"
                     value={form.score}
                     onChange={(e) => setForm((f) => ({ ...f, score: Number(e.target.value) }))}
-                    className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300"
+                    className="w-full rounded-lg border p-2.5 focus:outline-none focus:ring-2 focus:ring-highland-300
+                               dark:bg-dark-card dark:border-dark-border dark:text-dark-text"
                     required
                   />
                 </div>
               </motion.div>
 
               <motion.div variants={fieldFade} className="flex items-center justify-end gap-2 pt-2">
-                <button type="button" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-gray-600 hover:text-gray-800">
+                <button type="button" onClick={() => setOpen(false)} className="px-3 py-2 text-sm text-gray-600 hover:text-gray-800 dark:text-gray-300">
                   Cancel
                 </button>
                 <button disabled={saving} className="btn-primary">
@@ -404,28 +418,34 @@ export default function Leaderboard() {
       {/* Delete Result modal */}
       {delOpen && delTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <motion.div variants={fadeIn} initial="hidden" animate="visible" className="w-full max-w-md rounded-2xl border bg-white p-6 shadow-soft">
+          <motion.div
+            variants={fadeIn}
+            initial="hidden"
+            animate="visible"
+            className="w-full max-w-md rounded-2xl border bg-white p-6 shadow-soft
+                       dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+          >
             <div className="flex items-center justify-between mb-3">
               <h2 className="h2 text-lg">Delete Result</h2>
-              <button onClick={() => setDelOpen(false)} className="text-gray-500 hover:text-gray-700">✕</button>
+              <button onClick={() => setDelOpen(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-300">✕</button>
             </div>
 
             <div className="space-y-3">
-              <p className="text-gray-700">
+              <p className="text-gray-700 dark:text-gray-300">
                 Are you sure you want to delete this result? This action cannot be undone.
               </p>
 
-              <div className="rounded-lg border bg-gray-50 p-3 text-sm">
-                <div className="font-semibold text-gray-900">{delTarget.athlete}</div>
-                {delTarget.club && <div className="text-gray-600">{delTarget.club}</div>}
-                <div className="mt-1 flex items-center gap-3 text-gray-700">
+              <div className="rounded-lg border bg-gray-50 p-3 text-sm dark:bg-[#26302c] dark:border-dark-border">
+                <div className="font-semibold text-gray-900 dark:text-dark-text">{delTarget.athlete}</div>
+                {delTarget.club && <div className="text-gray-600 dark:text-gray-400">{delTarget.club}</div>}
+                <div className="mt-1 flex items-center gap-3 text-gray-700 dark:text-gray-300">
                   <span className="inline-flex items-center gap-1">
                     <Medal pos={delTarget.position} /> Place {delTarget.position}
                   </span>
                   <span>•</span>
                   <span>{delTarget.eventName}</span>
                   <span>•</span>
-                  <span className="font-semibold text-highland-800">{delTarget.score}</span>
+                  <span className="font-semibold text-highland-800 dark:text-dark-heading">{delTarget.score}</span>
                 </div>
               </div>
             </div>
@@ -434,7 +454,7 @@ export default function Leaderboard() {
               <button
                 type="button"
                 onClick={() => setDelOpen(false)}
-                className="px-3 py-2 text-sm text-gray-600 hover:text-gray-800"
+                className="px-3 py-2 text-sm text-gray-600 hover:text-gray-800 dark:text-gray-300"
                 disabled={deleting}
               >
                 Cancel

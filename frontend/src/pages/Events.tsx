@@ -11,9 +11,14 @@ const items = [
 export default function Events() {
   return (
     <section className="container-page section">
-      <motion.div variants={fadeIn} initial="hidden" animate="visible" className="mb-6">
+      <motion.div
+        variants={fadeIn}
+        initial="hidden"
+        animate="visible"
+        className="mb-6"
+      >
         <h1 className="h2">Events & Map</h1>
-        <p className="lead mt-2 text-gray-600 dark:text-dark-text/80">
+        <p className="lead mt-2">
           Venues within the Paisley showground. Tap markers to see locations.
         </p>
       </motion.div>
@@ -24,16 +29,21 @@ export default function Events() {
         variants={formStagger}
         initial="hidden"
         animate="visible"
-        className="mt-8 grid gap-4 md:grid-cols-3"
+        className="mt-8 grid gap-6 md:grid-cols-3"
       >
         {items.map((x) => (
           <motion.div
             key={x.title}
             variants={fieldFade}
-            className="rounded-2xl border bg-white dark:bg-dark-card p-4 shadow-soft dark:shadow-softDark"
+            className="rounded-2xl border bg-white p-6 shadow-soft transition
+                       dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
           >
-            <h3 className="font-semibold text-highland-700 dark:text-dark-text">{x.title}</h3>
-            <p className="text-sm text-gray-600 dark:text-dark-text/80 mt-1">{x.desc}</p>
+            <h3 className="text-lg font-semibold text-highland-800 dark:text-dark-heading">
+              {x.title}
+            </h3>
+            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+              {x.desc}
+            </p>
           </motion.div>
         ))}
       </motion.div>
