@@ -31,8 +31,23 @@ export default function EventMap() {
     : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
   return (
-    <div className="rounded-2xl border bg-white dark:bg-dark-card shadow-soft dark:shadow-softDark overflow-hidden">
-      <MapContainer center={center} zoom={15} style={{ height: 420, width: "100%" }}>
+    <div
+      className="
+        rounded-2xl border bg-white shadow-soft overflow-hidden
+        dark:bg-dark-card dark:border-dark-border dark:shadow-softDark
+      "
+    >
+      <MapContainer
+        center={center}
+        zoom={15}
+        className="leaflet-map"
+        style={{
+          height: 420,
+          width: "100%",
+          border: "none",
+          background: "transparent",
+        }}
+      >
         <TileLayer url={url} attribution={attribution} />
         {spots.map((s) => (
           <Marker key={s.id} position={s.pos} icon={icon}>
@@ -40,6 +55,27 @@ export default function EventMap() {
           </Marker>
         ))}
       </MapContainer>
+
+      <style>
+        {`
+          /* Force Leaflet container to blend with dark theme */
+          .leaflet-map,
+          .leaflet-container {
+            background: transparent !important;
+            border: none !important;
+          }
+
+          /* Optional: make the zoom buttons darker in dark mode */
+          .dark .leaflet-control-container .leaflet-bar a {
+            background: #0f1917;
+            color: #cde9de;
+            border-color: #2a3733;
+          }
+          .dark .leaflet-control-container .leaflet-bar a:hover {
+            background: #14211e;
+          }
+        `}
+      </style>
     </div>
   );
 }
