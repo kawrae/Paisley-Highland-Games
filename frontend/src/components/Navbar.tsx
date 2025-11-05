@@ -2,11 +2,7 @@ import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../lib/auth";
 
 const linkClass = ({ isActive }: { isActive: boolean }) =>
-  `px-3 py-2 text-sm ${
-    isActive
-      ? "text-highland-800 font-semibold"
-      : "text-gray-600 hover:text-highland-800"
-  }`;
+  `px-3 py-2 text-sm ${isActive ? "text-highland-800 font-semibold" : "text-gray-600 hover:text-highland-800"}`;
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -36,19 +32,16 @@ export default function Navbar() {
             About
           </NavLink>
 
-          {/* Admin link (only visible for admin users) */}
-          {user?.role === "admin" && (
-            <NavLink to="/admin/registrations" className={linkClass}>
-              Admin Panel
-            </NavLink>
-          )}
-
-          {/* Auth area */}
           {user ? (
             <div className="flex items-center gap-2 pl-2">
-              <span className="rounded-full bg-highland-100 text-highland-800 text-xs px-2 py-1">
-                {user.role === "admin" ? "Admin" : "User"}
-              </span>
+              {user.role === "admin" && (
+                <Link
+                  to="/admin/registrations"
+                  className="rounded-full bg-highland-100 text-highland-800 text-xs px-2 py-1 hover:bg-highland-200"
+                >
+                  Admin
+                </Link>
+              )}
               <button
                 onClick={() => {
                   logout();
