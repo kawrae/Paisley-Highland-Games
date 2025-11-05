@@ -1,13 +1,17 @@
-import Navbar from "./Navbar"
+import { Outlet } from "react-router-dom";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1">{children}</main>
-      <footer className="border-t">
-        <div className="container-page py-6 text-sm text-gray-500">© Paisley Highland Games</div>
-      </footer>
+
+      <main className="flex-1">
+        <Outlet />
+      </main>
+
+      <Footer />
     </div>
-  )
+  );
 }
