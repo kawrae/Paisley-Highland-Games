@@ -9,7 +9,7 @@ export default function Footer() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="relative mt-20 bg-gradient-to-r from-emerald-900 via-green-800 to-teal-900 text-gray-100 py-10 before:absolute before:top-0 before:left-0 before:w-full before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent"
+      className="relative mt-20 bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-800 text-gray-100 py-10 before:absolute before:top-0 before:left-0 before:w-full before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent"
     >
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
         {/* Left side */}
