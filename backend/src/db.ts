@@ -5,7 +5,12 @@ dotenv.config();
 
 const db = new Database("data.sqlite");
 
-// Migrations
+// Enforce FKs
+db.pragma("foreign_keys = ON");
+
+// -------------------------
+// Migrations (idempotent)
+// -------------------------
 db.exec(`
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,27 +35,57 @@ CREATE TABLE IF NOT EXISTS results (
   date TEXT NOT NULL,
   FOREIGN KEY(event_id) REFERENCES events(id)
 );
+
+CREATE TABLE IF NOT EXISTS registrations (
+  id TEXT PRIMARY KEY,
+  first_name TEXT NOT NULL,
+  last_name  TEXT NOT NULL,
+  email      TEXT NOT NULL,
+  event_id   TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY(event_id) REFERENCES events(id)
+);
+-- Optional: prevent duplicate sign-ups for the same event
+CREATE UNIQUE INDEX IF NOT EXISTS uq_reg_email_event ON registrations(email, event_id);
 `);
 
-// Seed admin if missing
-const adminEmail = process.env.ADMIN_EMAIL!;
-const adminPass = process.env.ADMIN_PASSWORD!;
-const admin = db.prepare(`SELECT * FROM users WHERE email = ?`).get(adminEmail);
+// -------------------------
+// Seed admin + default events
+// -------------------------
+const adminEmail = process.env.ADMIN_EMAIL || "admin@phg.local";
+const adminPass = process.env.ADMIN_PASSWORD || "admin123";
+
+const admin = db
+  .prepare("SELECT id FROM users WHERE email = ?")
+  .get(adminEmail);
 if (!admin) {
   const hash = bcrypt.hashSync(adminPass, 10);
-  db.prepare(`INSERT INTO users (email, password_hash, role) VALUES (?,?, 'admin')`)
-    .run(adminEmail, hash);
+  db.prepare(
+    "INSERT INTO users (email, password_hash, role) VALUES (?, ?, 'admin')"
+  ).run(adminEmail, hash);
   console.log(`Seeded admin: ${adminEmail} / ${adminPass}`);
 }
 
-// Seed standard events if none exist
-const eventCount = db.prepare(`SELECT COUNT(*) as c FROM events`).get() as { c: number };
-if (eventCount.c === 0) {
-  const insert = db.prepare(`INSERT INTO events (id, name) VALUES (?,?)`);
-  insert.run("caber", "Caber Toss");
-  insert.run("tug", "Tug o’ War");
-  insert.run("stone", "Stone Put");
+const existingEvents = db.prepare("SELECT count(*) as c FROM events").get() as {
+  c: number;
+};
+if (!existingEvents.c) {
+  const seed = db.prepare("INSERT INTO events (id, name) VALUES (?, ?)");
+  seed.run("caber", "Caber Toss");
+  seed.run("tug", "Tug o’ War");
+  seed.run("stone", "Stone Put");
   console.log("Seeded default events.");
 }
+
+const cols = db.prepare(`PRAGMA table_info(registrations)`).all() as any[];
+if (!cols.some((c) => c.name === "status")) {
+  db.exec(
+    `ALTER TABLE registrations ADD COLUMN status TEXT NOT NULL DEFAULT 'pending'`
+  );
+}
+db.exec(`
+  CREATE INDEX IF NOT EXISTS idx_reg_created ON registrations(created_at);
+  CREATE INDEX IF NOT EXISTS idx_reg_status ON registrations(status);
+`);
 
 export default db;
