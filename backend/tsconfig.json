@@ -8,7 +8,7 @@
     "noImplicitAny": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "types": ["node"],
+    "types": ["node", "express"],
     "lib": ["ES2020"],
     "skipLibCheck": true
   },
