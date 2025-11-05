@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
@@ -15,20 +15,18 @@ app.use(express.json());
 
 const PORT = Number(process.env.PORT || 4000);
 
-// -------------------------
-// Auth
-// -------------------------
-app.post("/api/auth/login", (req, res) => {
+/* ---------------- Auth ---------------- */
+app.post("/api/auth/login", (req: Request, res: Response) => {
   try {
     const { email, password } = req.body || {};
-    if (!email || !password) {
+    if (!email || !password)
       return res.status(400).json({ error: "Missing email/password" });
-    }
 
-    const row = db.prepare(`SELECT * FROM users WHERE email = ?`).get(email) as any;
-    if (!row || !row.password_hash) {
+    const row = db
+      .prepare(`SELECT * FROM users WHERE email = ?`)
+      .get(email) as any;
+    if (!row || !row.password_hash)
       return res.status(401).json({ error: "Invalid credentials" });
-    }
 
     const ok = bcrypt.compareSync(password, row.password_hash);
     if (!ok) return res.status(401).json({ error: "Invalid credentials" });
@@ -44,7 +42,6 @@ app.post("/api/auth/login", (req, res) => {
       secret,
       { expiresIn: "12h" }
     );
-
     res.json({ token, user: { email: row.email, role: row.role } });
   } catch (e) {
     console.error("Login error:", e);
@@ -52,18 +49,26 @@ app.post("/api/auth/login", (req, res) => {
   }
 });
 
-// -------------------------
-// Events
-// -------------------------
-app.get("/api/events", (_req, res) => {
-  const rows = db.prepare(`SELECT id as _id, name FROM events ORDER BY name`).all();
+/* ---------------- Events ---------------- */
+app.get("/api/events", (_req: Request, res: Response) => {
+  const rows = db
+    .prepare(`SELECT id as _id, name FROM events ORDER BY name`)
+    .all();
   res.json(rows);
 });
 
-// -------------------------
-// Results
-// -------------------------
-app.get("/api/results", (_req, res) => {
+/* ---------------- Results ---------------- */
+const resultSchema = z.object({
+  athlete: z.string().min(1),
+  club: z.string().optional(),
+  eventId: z.string().min(1),
+  eventName: z.string().min(1),
+  position: z.number().int().min(1),
+  score: z.number(),
+  date: z.string().min(1),
+});
+
+app.get("/api/results", (_req: Request, res: Response) => {
   const rows = db
     .prepare(
       `
@@ -77,47 +82,12 @@ app.get("/api/results", (_req, res) => {
   res.json(rows);
 });
 
-const resultSchema = z.object({
-  athlete: z.string().min(1),
-  club: z.string().optional(),
-  eventId: z.string().min(1),
-  eventName: z.string().min(1),
-  position: z.number().int().min(1),
-  score: z.number(),
-  date: z.string().min(1),
-});
-
-app.post("/api/registrations", (req, res) => {
-  const parsed = registrationSchema.safeParse(req.body);
-  if (!parsed.success) return res.status(400).json({ error: "Invalid payload", issues: parsed.error.issues });
-
-  const event = db.prepare("SELECT id FROM events WHERE id = ?").get(parsed.data.eventId);
-  if (!event) return res.status(400).json({ error: "Unknown event" });
-
-  const id = crypto.randomUUID();
-  db.prepare(`
-    INSERT INTO registrations (id, first_name, last_name, email, event_id, created_at, status)
-    VALUES (?, ?, ?, ?, ?, ?, 'pending')
-  `).run(
-    id,
-    parsed.data.firstName.trim(),
-    parsed.data.lastName.trim(),
-    parsed.data.email.trim(),
-    parsed.data.eventId,
-    new Date().toISOString()
-  );
-
-  res.status(201).json({ id });
-});
-
-app.delete("/api/results/:id", requireAdmin, (req, res) => {
+app.delete("/api/results/:id", requireAdmin, (req: Request, res: Response) => {
   db.prepare(`DELETE FROM results WHERE id = ?`).run(req.params.id);
   res.json({ ok: true });
 });
 
-// -------------------------
-// Registrations
-// -------------------------
+/* ---------------- Registrations ---------------- */
 const registrationSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
@@ -125,23 +95,24 @@ const registrationSchema = z.object({
   eventId: z.string().min(1),
 });
 
-app.post("/api/registrations", (req, res) => {
+app.post("/api/registrations", (req: Request, res: Response) => {
   const parsed = registrationSchema.safeParse(req.body);
-  if (!parsed.success) {
-    return res.status(400).json({ error: "Invalid payload", issues: parsed.error.issues });
-  }
+  if (!parsed.success)
+    return res
+      .status(400)
+      .json({ error: "Invalid payload", issues: parsed.error.issues });
 
-  // ensure event exists (defensive)
-  const event = db.prepare("SELECT id FROM events WHERE id = ?").get(parsed.data.eventId);
+  const event = db
+    .prepare("SELECT id FROM events WHERE id = ?")
+    .get(parsed.data.eventId);
   if (!event) return res.status(400).json({ error: "Unknown event" });
 
   const id = crypto.randomUUID();
-
   try {
     db.prepare(
       `
-      INSERT INTO registrations (id, first_name, last_name, email, event_id, created_at)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO registrations (id, first_name, last_name, email, event_id, created_at, status)
+      VALUES (?, ?, ?, ?, ?, ?, 'pending')
     `
     ).run(
       id,
@@ -151,16 +122,16 @@ app.post("/api/registrations", (req, res) => {
       parsed.data.eventId,
       new Date().toISOString()
     );
-
     return res.status(201).json({ _id: id });
-  } catch (e: any) {
-    // If you add a UNIQUE(email,event_id) constraint, you might catch duplicates here
+  } catch (e) {
     return res.status(500).json({ error: "Failed to save registration" });
   }
 });
 
-app.get("/api/registrations", requireAdmin, (_req, res) => {
-  const rows = db.prepare(`
+app.get("/api/registrations", requireAdmin, (_req: Request, res: Response) => {
+  const rows = db
+    .prepare(
+      `
     SELECT r.id,
            r.first_name  AS firstName,
            r.last_name   AS lastName,
@@ -172,25 +143,39 @@ app.get("/api/registrations", requireAdmin, (_req, res) => {
     FROM registrations r
     JOIN events e ON e.id = r.event_id
     ORDER BY r.created_at DESC
-  `).all();
+  `
+    )
+    .all();
   res.json(rows);
 });
 
-app.patch("/api/registrations/:id", requireAdmin, (req, res) => {
-  const { status } = req.body || {};
-  if (!["pending", "approved", "rejected"].includes(status))
-    return res.status(400).json({ error: "Bad status" });
+app.patch(
+  "/api/registrations/:id",
+  requireAdmin,
+  (req: Request, res: Response) => {
+    const { status } = req.body || {};
+    if (!["pending", "approved", "rejected"].includes(status))
+      return res.status(400).json({ error: "Bad status" });
 
-  const info = db.prepare(`UPDATE registrations SET status = ? WHERE id = ?`).run(status, req.params.id);
-  res.json({ ok: true, updated: info.changes });
-});
+    const info = db
+      .prepare(`UPDATE registrations SET status = ? WHERE id = ?`)
+      .run(status, req.params.id);
+    res.json({ ok: true, updated: info.changes });
+  }
+);
 
-app.delete("/api/registrations/:id", requireAdmin, (req, res) => {
-  const info = db.prepare(`DELETE FROM registrations WHERE id = ?`).run(req.params.id);
-  res.json({ ok: true, deleted: info.changes });
-});
+app.delete(
+  "/api/registrations/:id",
+  requireAdmin,
+  (req: Request, res: Response) => {
+    const info = db
+      .prepare(`DELETE FROM registrations WHERE id = ?`)
+      .run(req.params.id);
+    res.json({ ok: true, deleted: info.changes });
+  }
+);
 
-// -------------------------
+/* ---------------- Start ---------------- */
 app.listen(PORT, () => {
   console.log(`API listening on http://localhost:${PORT}`);
 });
