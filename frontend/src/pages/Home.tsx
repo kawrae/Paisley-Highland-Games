@@ -32,17 +32,17 @@ export default function Home() {
           >
             <motion.h1
               variants={fadeUp}
-              className="h1 !text-emerald-100 drop-shadow-[0_3px_6px_rgba(0,0,0,0.4)] dark:!text-emerald-200"
+              className="h1 !text-emerald-100 drop-shadow-[0_3px_6px_rgba(0,0,0,0.4)] dark:!text-emerald-100"
             >
               Welcome to the{" "}
-              <span className="!text-highland-200 dark:!text-emerald-200">
+              <span className="!text-highland-200 dark:!text-highland-200">
                 Paisley Highland Games
               </span>
             </motion.h1>
 
             <motion.p
               variants={fadeUp}
-              className="lead mt-4 !text-white/90 dark:!text-gray-300"
+              className="lead mt-4 !text-white/90 dark:!text-gray-200"
             >
               Experience Scotland’s iconic athletic traditions — from caber
               tossing to tug o’ war — right here in Paisley. Browse events,
