@@ -73,6 +73,41 @@ app.get("/api/results", async (_req: Request, res: Response) => {
   res.json(r.rows);
 });
 
+app.post("/api/results", requireAdmin, async (req: Request, res: Response) => {
+  const parsed = resultSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Invalid payload", issues: parsed.error.issues });
+  }
+
+  const { athlete, club, eventId, eventName, position, score, date } = parsed.data;
+  const id = crypto.randomUUID();
+
+  try {
+    await db.execute({
+      sql: `
+        INSERT INTO results
+          (id, athlete, club, event_id, event_name, position, score, date)
+        VALUES
+          (?,  ?,       ?,    ?,        ?,          ?,        ?,     ?)
+      `,
+      args: [id, athlete, club ?? null, eventId, eventName, position, score, date],
+    });
+
+    return res.status(201).json({
+      _id: id,
+      athlete,
+      club: club ?? undefined,
+      eventId,
+      eventName,
+      position,
+      score,
+      date,
+    });
+  } catch {
+    return res.status(500).json({ error: "Failed to save result" });
+  }
+});
+
 app.delete(
   "/api/results/:id",
   requireAdmin,
