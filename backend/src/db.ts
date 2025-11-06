@@ -1,24 +1,33 @@
-import Database from "better-sqlite3";
+import { createClient } from "@libsql/client";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 dotenv.config();
 
-const db = new Database(process.env.DB_FILE || "data.sqlite");
-db.pragma("foreign_keys = ON");
+export const db = createClient({
+  url: process.env.DATABASE_URL!,
+  authToken: process.env.DATABASE_AUTH_TOKEN,
+});
 
-db.exec(`
+export async function init() {
+  await db.execute(`PRAGMA foreign_keys = ON;`);
+
+  await db.execute(`
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   email TEXT UNIQUE NOT NULL,
   password_hash TEXT NOT NULL,
   role TEXT NOT NULL CHECK (role IN ('admin','user'))
 );
+`);
 
+  await db.execute(`
 CREATE TABLE IF NOT EXISTS events (
   id   TEXT PRIMARY KEY,
   name TEXT NOT NULL
 );
+`);
 
+  await db.execute(`
 CREATE TABLE IF NOT EXISTS results (
   id         TEXT PRIMARY KEY,
   athlete    TEXT NOT NULL,
@@ -30,7 +39,9 @@ CREATE TABLE IF NOT EXISTS results (
   date       TEXT NOT NULL,
   FOREIGN KEY(event_id) REFERENCES events(id)
 );
+`);
 
+  await db.execute(`
 CREATE TABLE IF NOT EXISTS registrations (
   id         TEXT PRIMARY KEY,
   first_name TEXT NOT NULL,
@@ -41,48 +52,41 @@ CREATE TABLE IF NOT EXISTS registrations (
   created_at TEXT NOT NULL,
   FOREIGN KEY(event_id) REFERENCES events(id)
 );
-
-CREATE UNIQUE INDEX IF NOT EXISTS uq_reg_email_event ON registrations(email, event_id);
-CREATE INDEX IF NOT EXISTS idx_results_event ON results(event_id);
-CREATE INDEX IF NOT EXISTS idx_results_date  ON results(date);
-CREATE INDEX IF NOT EXISTS idx_reg_created   ON registrations(created_at);
-CREATE INDEX IF NOT EXISTS idx_reg_status    ON registrations(status);
 `);
 
-const cols = db.prepare(`PRAGMA table_info(registrations)`).all() as any[];
-if (!cols.some((c) => c.name === "status")) {
-  db.exec(
-    `ALTER TABLE registrations ADD COLUMN status TEXT NOT NULL DEFAULT 'pending'`
-  );
-}
+  await db.execute(`CREATE UNIQUE INDEX IF NOT EXISTS uq_reg_email_event ON registrations(email, event_id);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_results_event ON results(event_id);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_results_date  ON results(date);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_reg_created   ON registrations(created_at);`);
+  await db.execute(`CREATE INDEX IF NOT EXISTS idx_reg_status    ON registrations(status);`);
 
-const adminEmail = process.env.ADMIN_EMAIL || "admin@phg.local";
-const adminPass = process.env.ADMIN_PASSWORD || "admin123";
+  const adminEmail = process.env.ADMIN_EMAIL || "admin@phg.local";
+  const adminPass = process.env.ADMIN_PASSWORD || "admin123";
+  const hash = bcrypt.hashSync(adminPass, 10);
 
-const hash = bcrypt.hashSync(adminPass, 10);
-const existing = db
-  .prepare("SELECT id FROM users WHERE email=?")
-  .get(adminEmail);
-if (existing) {
-  db.prepare(
-    "UPDATE users SET password_hash=?, role='admin' WHERE email=?"
-  ).run(hash, adminEmail);
-} else {
-  db.prepare(
-    "INSERT INTO users (email, password_hash, role) VALUES (?,?, 'admin')"
-  ).run(adminEmail, hash);
-}
-console.log("Admin seeded:", adminEmail);
+  const existing = await db.execute({
+    sql: "SELECT id FROM users WHERE email = ?",
+    args: [adminEmail],
+  });
+  if (existing.rows.length) {
+    await db.execute({
+      sql: "UPDATE users SET password_hash = ?, role = 'admin' WHERE email = ?",
+      args: [hash, adminEmail],
+    });
+  } else {
+    await db.execute({
+      sql: "INSERT INTO users (email, password_hash, role) VALUES (?, ?, 'admin')",
+      args: [adminEmail, hash],
+    });
+  }
 
-const { c: eventCount } = db
-  .prepare("SELECT count(*) as c FROM events")
-  .get() as { c: number };
-if (!eventCount) {
-  const seed = db.prepare("INSERT INTO events (id, name) VALUES (?, ?)");
-  seed.run("caber", "Caber Toss");
-  seed.run("tug", "Tug o’ War");
-  seed.run("stone", "Stone Put");
-  console.log("Seeded default events.");
+  const cnt = await db.execute("SELECT count(*) as c FROM events");
+  const c = Number((cnt.rows[0] as any).c ?? 0);
+  if (!c) {
+    await db.execute({ sql: "INSERT INTO events (id, name) VALUES (?, ?)", args: ["caber", "Caber Toss"] });
+    await db.execute({ sql: "INSERT INTO events (id, name) VALUES (?, ?)", args: ["tug", "Tug o’ War"] });
+    await db.execute({ sql: "INSERT INTO events (id, name) VALUES (?, ?)", args: ["stone", "Stone Put"] });
+  }
 }
 
 export default db;
