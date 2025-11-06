@@ -76,19 +76,19 @@ export default function Home() {
               title: "Caber Toss",
               desc: "A legendary display of strength where athletes flip massive wooden poles end-over-end. One of the most iconic Highland challenges.",
               img: "/images/caber-toss.jpg",
-              link: "/events#caber",
+              link: "/events/caber",
             },
             {
               title: "Tug o’ War",
               desc: "Teams of eight face off in a contest of teamwork, balance, and sheer determination. A festival favourite for all ages.",
               img: "/images/tug-of-war.jpg",
-              link: "/events#tug",
+              link: "/events/tugowar",
             },
             {
               title: "Stone Put",
               desc: "Scotland’s ancient answer to the shot put — athletes launch a heavy stone for distance using raw technique and power.",
               img: "/images/stone-put.jpg",
-              link: "/events#stone",
+              link: "/events/stone",
             },
           ].map((c) => (
             <motion.div
