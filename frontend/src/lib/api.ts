@@ -1,8 +1,12 @@
 import axios from "axios";
 
-const envUrl = import.meta.env.VITE_API_URL?.replace(/\/+$/, "");
-const fallback = import.meta.env.DEV ? "http://localhost:4000/api" : "/api";
-const baseURL = envUrl || fallback;
+const envRoot = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+
+const fallbackRoot = import.meta.env.DEV ? "http://localhost:4000" : "";
+
+const root = envRoot || fallbackRoot;
+
+const baseURL = root ? `${root}/api` : "/api";
 
 export const api = axios.create({
   baseURL,
@@ -13,7 +17,7 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem("phg_token");
   if (token) {
     config.headers = config.headers ?? {};
-    config.headers.Authorization = `Bearer ${token}`;
+    (config.headers as any).Authorization = `Bearer ${token}`;
   }
   return config;
 });
