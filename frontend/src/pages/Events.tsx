@@ -4,16 +4,25 @@ import EventMap from "../components/EventMap";
 import { fadeIn, fieldFade, formStagger } from "../lib/anim";
 
 const items = [
-  { title: "Caber Toss", desc: "Classic test of strength and control." },
-  { title: "Tug o’ War", desc: "Teams compete in grit and balance." },
-  { title: "Stone Put", desc: "Traditional precursor to shot put." },
+  {
+    title: "Caber Toss",
+    desc: "Classic test of strength and control.",
+    img: "/images/caber-toss.jpg",
+    link: "/events/caber",
+  },
+  {
+    title: "Tug o’ War",
+    desc: "Teams compete in grit and balance.",
+    img: "/images/tug-of-war.jpg",
+    link: "/events/tugowar",
+  },
+  {
+    title: "Stone Put",
+    desc: "Traditional precursor to shot put.",
+    img: "/images/stone-put.jpg",
+    link: "/events/stone",
+  },
 ];
-
-const eventLinks: Record<string, string> = {
-  "Caber Toss": "/events/caber",
-  "Tug o’ War": "/events/tugowar",
-  "Stone Put": "/events/stone",
-};
 
 export default function Events() {
   return (
@@ -42,20 +51,32 @@ export default function Events() {
           <motion.div
             key={x.title}
             variants={fieldFade}
-            className="rounded-2xl border bg-white p-6 shadow-soft transition
-                 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+            whileHover={{ scale: 1.02 }}
+            className="group"
           >
-            <h3 className="text-lg font-semibold">
-              <Link
-                to={eventLinks[x.title] || "#"}
-                className="text-highland-800 dark:text-dark-heading hover:text-emerald-400 dark:hover:text-emerald-300 transition-colors duration-200"
-              >
-                {x.title}
-              </Link>
-            </h3>
-            <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-              {x.desc}
-            </p>
+            <Link
+              to={x.link}
+              className="block overflow-hidden rounded-2xl border bg-white shadow-soft hover:shadow-lg transition dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+            >
+              <div className="h-40 overflow-hidden">
+                <img
+                  src={x.img}
+                  alt={x.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg font-semibold text-highland-800 dark:text-dark-heading">
+                  {x.title}
+                </h3>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                  {x.desc}
+                </p>
+                <div className="mt-4 text-sm text-highland-700 dark:text-highland-300 font-medium">
+                  Learn more →
+                </div>
+              </div>
+            </Link>
           </motion.div>
         ))}
       </motion.div>
