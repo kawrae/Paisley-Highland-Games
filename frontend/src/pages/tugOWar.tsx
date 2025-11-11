@@ -87,19 +87,24 @@ export default function TugOWar() {
                 See the event schedule on the main page or event map.
               </p>
 
-              <h3 className="mt-4 text-sm font-medium">How to enter</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Use the registration form to sign up:{" "}
-                <strong>
-                  <Link
-                    to="/register"
-                    className="text-highland-800 dark:text-dark-heading hover:text-emerald-100 dark:hover:text-emerald-300 transition-colors duration-300"
-                  >
-                    Register
-                  </Link>
-                </strong>
-                .
-              </p>
+              <motion.div
+                variants={fadeIn}
+                initial="hidden"
+                animate="visible"
+                transition={{ delay: 0.18 }}
+                className="mt-4"
+              >
+                <Link
+                  to="/register"
+                  aria-label="Register for Tug o' War"
+                  className="btn-primary inline-flex items-center gap-3"
+                >
+                  Register
+                </Link>
+                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  Limited spots! Sign up now
+                </div>
+              </motion.div>
             </div>
           </div>
 
