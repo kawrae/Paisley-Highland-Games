@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 /* ---------- Root and Base ---------- */
-:root { color-scheme: light dark; }
+:root { color-scheme: light; }
+.dark { color-scheme: dark; }
 
 html, body, #root { height: 100%; }
 

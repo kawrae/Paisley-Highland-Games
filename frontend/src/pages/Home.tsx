@@ -5,40 +5,64 @@ import { fadeUp, stagger, fadeIn } from "../lib/anim";
 export default function Home() {
   return (
     <>
-      {/* HERO */}
-      <div className="bg-hero-gradient dark:bg-hero-gradient-dark border-b transition-colors duration-300">
-        <div className="container-page section">
+      <section className="relative isolate overflow-hidden">
+        <div
+          className="absolute inset-0 bg-center bg-cover scale-105"
+          style={{
+            backgroundImage: "url('/images/tartan-hero.webp')",
+            filter: "brightness(0.8) contrast(1.1) saturate(1.1)",
+          }}
+          aria-hidden="true"
+        />
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50 dark:from-[#0a0a0a]/60 dark:via-[#0a0a0a]/40 dark:to-[#0a0a0a]/80"
+          aria-hidden="true"
+        />
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent via-black/15 to-black/30 dark:via-black/25 dark:to-black/40"
+          aria-hidden="true"
+        />
+
+        <div className="container-page section relative">
           <motion.div
             initial="hidden"
             animate="visible"
             variants={stagger}
             className="text-center max-w-3xl mx-auto"
           >
-            <motion.h1 variants={fadeUp} className="h1">
-              Welcome to the Paisley Highland Games
+            <motion.h1
+              variants={fadeUp}
+              className="h1 !text-emerald-100 drop-shadow-[0_3px_6px_rgba(0,0,0,0.4)] dark:!text-emerald-100"
+            >
+              Welcome to the{" "}
+              <span className="!text-highland-200 dark:!text-highland-200">
+                Paisley Highland Games
+              </span>
             </motion.h1>
 
-            <motion.p variants={fadeUp} className="lead mt-4">
+            <motion.p
+              variants={fadeUp}
+              className="lead mt-4 !text-white/90 dark:!text-gray-200"
+            >
               Experience Scotland’s iconic athletic traditions — from caber
               tossing to tug o’ war — right here in Paisley. Browse events,
               register as a competitor, or check out results.
             </motion.p>
 
             <motion.div variants={fadeUp} className="mt-8">
-              <Link to="/register" className="btn-primary">
+              <Link
+                to="/register"
+                className="btn-primary shadow-md hover:shadow-lg transition-transform hover:scale-[1.03]"
+              >
                 Register to Compete
               </Link>
             </motion.div>
           </motion.div>
         </div>
-      </div>
 
-      {/* TARTAN STRIP (unchanged in dark mode) */}
-      <div className="bg-tartan">
-        <div className="container-page py-3" />
-      </div>
+        <div className="bg-tartan h-2 w-full" />
+      </section>
 
-      {/* FEATURE CARDS */}
       <section className="container-page section">
         <motion.div
           variants={stagger}
@@ -52,19 +76,19 @@ export default function Home() {
               title: "Caber Toss",
               desc: "A legendary display of strength where athletes flip massive wooden poles end-over-end. One of the most iconic Highland challenges.",
               img: "/images/caber-toss.jpg",
-              link: "/events#caber",
+              link: "/events/caber",
             },
             {
               title: "Tug o’ War",
               desc: "Teams of eight face off in a contest of teamwork, balance, and sheer determination. A festival favourite for all ages.",
               img: "/images/tug-of-war.jpg",
-              link: "/events#tug",
+              link: "/events/tugowar",
             },
             {
               title: "Stone Put",
               desc: "Scotland’s ancient answer to the shot put — athletes launch a heavy stone for distance using raw technique and power.",
               img: "/images/stone-put.jpg",
-              link: "/events#stone",
+              link: "/events/stone",
             },
           ].map((c) => (
             <motion.div
@@ -89,7 +113,7 @@ export default function Home() {
                 </p>
                 <Link
                   to={c.link}
-                  className="mt-4 inline-block text-sm text-highland-700 font-medium hover:underline"
+                  className="mt-4 inline-block text-sm text-highland-700 dark:text-highland-300 font-medium hover:underline"
                 >
                   Learn more →
                 </Link>

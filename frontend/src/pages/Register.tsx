@@ -83,14 +83,45 @@ export default function Register() {
           variants={fadeIn}
           initial="hidden"
           animate="visible"
-          className="max-w-xl mx-auto rounded-2xl border bg-white p-6 shadow-soft text-center
-                     dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+          className="max-w-xl mx-auto rounded-2xl border bg-white p-8 shadow-soft text-center
+                   dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
         >
-          <h2 className="h2 mb-2">Registration received</h2>
-          <p className="text-gray-600 dark:text-gray-300">
-            We’ll email you with details.
+          <div
+            className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full 
+                        bg-highland-100 dark:bg-dark-accent/20"
+          >
+            <svg
+              className="h-8 w-8 text-highland-600 dark:text-dark-accent"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </div>
+
+          <h2 className="h2 mb-3 text-highland-800 dark:text-dark-heading">
+            Registration received!
+          </h2>
+
+          <p className="text-gray-600 dark:text-gray-300 mb-2">
+            Thank you for registering to take part in the{" "}
+            <b>Paisley Highland Games.</b>
           </p>
-          <button onClick={() => setOk(false)} className="btn-primary mt-6">
+          <p className="text-gray-600 dark:text-gray-300 mb-6">
+            Our team will email you shortly with event details, schedules, and
+            everything you need to know.
+          </p>
+
+          <button
+            onClick={() => setOk(false)}
+            className="btn-primary mt-2 active:scale-[0.98]"
+          >
             Register another competitor
           </button>
         </motion.div>
