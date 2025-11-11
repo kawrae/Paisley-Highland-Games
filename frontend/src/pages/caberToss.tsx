@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { fadeIn } from "../lib/anim";
 import EventMap from "../components/EventMap";
+import { api } from "../lib/api";
+import { useEffect } from "react";
+import { stagger, fieldFade, fadeUp } from "../lib/anim";
 
 export default function CaberToss() {
   const [lightbox, setLightbox] = useState<string | null>(null);
@@ -121,6 +124,9 @@ export default function CaberToss() {
           transition={{ delay: 0.28 }}
           className="mt-6 rounded-2xl border bg-white p-6 shadow-soft dark:bg-dark-card dark:border-dark-border"
         >
+          {/* Caber Toss leaderboard (top 5) */}
+          <LeaderboardCard />
+
           <h3 className="text-sm font-semibold">Entry requirements</h3>
           <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
             <li>
@@ -234,3 +240,116 @@ export default function CaberToss() {
 }
 
 // Lightbox modal is rendered at the end of the component return via state
+
+function LeaderboardCard() {
+  type Item = {
+    _id: string;
+    athlete: string;
+    club?: string;
+    position: number;
+    score: number;
+    eventId?: string;
+  };
+  const [items, setItems] = useState<Item[]>([]);
+  const [totalCount, setTotalCount] = useState<number>(0);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    setErr(null);
+    api
+      .get("/results")
+      .then((r) => {
+        if (!mounted) return;
+        const all: Item[] = r.data || [];
+        const caber = all.filter((x) => x.eventId === "caber");
+        setTotalCount(caber.length);
+        const top = caber.sort((a, b) => a.position - b.position).slice(0, 5);
+        setItems(top);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setErr("Could not load results");
+      })
+      .finally(() => mounted && setLoading(false));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const Medal = ({ pos }: { pos: number }) => {
+    if (pos === 1) return <span title="1st">🥇</span>;
+    if (pos === 2) return <span title="2nd">🥈</span>;
+    if (pos === 3) return <span title="3rd">🥉</span>;
+    return <span className="text-gray-400 dark:text-gray-500">#{pos}</span>;
+  };
+
+  return (
+    <motion.div
+      variants={fadeUp}
+      initial="hidden"
+      animate="visible"
+      className="mb-4 rounded-lg border p-4 bg-gray-50 dark:bg-[#0f1412] dark:border-dark-border"
+    >
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold">Caber Toss — Top results</h3>
+        <Link
+          to="/leaderboard"
+          className="text-sm text-highland-800 dark:text-highland-300 hover:underline"
+        >
+          View full leaderboard
+        </Link>
+      </div>
+
+      {loading ? (
+        <div className="mt-3 text-sm text-gray-500">Loading…</div>
+      ) : err ? (
+        <div className="mt-3 text-sm text-red-600">{err}</div>
+      ) : items.length === 0 ? (
+        <div className="mt-3 text-sm text-gray-600">No results yet</div>
+      ) : (
+        <motion.ol
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+          className="mt-3 space-y-2"
+        >
+          {items.map((it) => (
+            <motion.li
+              key={it._id}
+              variants={fieldFade}
+              className="flex items-center justify-between"
+            >
+              <div className="flex items-center gap-3">
+                <div className="text-xl">
+                  <Medal pos={it.position} />
+                </div>
+                <div>
+                  <div className="font-medium dark:text-dark-text">
+                    {it.athlete}
+                  </div>
+                  {it.club && (
+                    <div className="text-xs text-gray-500">{it.club}</div>
+                  )}
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="font-semibold text-highland-800 dark:text-dark-heading">
+                  {it.score}
+                </div>
+                <div className="text-xs text-gray-500">#{it.position}</div>
+              </div>
+            </motion.li>
+          ))}
+        </motion.ol>
+      )}
+      {totalCount > items.length && (
+        <div className="mt-2 text-xs text-gray-500">
+          Showing top {items.length} of {totalCount} results
+        </div>
+      )}
+    </motion.div>
+  );
+}
