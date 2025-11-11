@@ -8,8 +8,8 @@ import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
 import "leaflet/dist/leaflet.css";
 import Events from "./pages/Events";
-import CaberToss from "./pages/CaberToss";
-import TugOWar from "./pages/tugoWar";
+import CaberToss from "./pages/caberToss";
+import TugOWar from "./pages/tugOWar";
 import StonePut from "./pages/stonePut";
 
 export default function App() {
