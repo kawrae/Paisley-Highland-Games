@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../lib/auth";
 import { useTheme } from "../lib/theme";
 
@@ -52,6 +53,9 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const nav = useNavigate();
   const [open, setOpen] = useState(false);
+  const [eventsOpen, setEventsOpen] = useState(false);
+  const location = useLocation();
+  const eventsActive = location.pathname.startsWith("/events");
 
   return (
     <header className="sticky top-0 z-40 border-b bg-white/70 backdrop-blur dark:bg-neutral-900/60 dark:border-neutral-800 transition-colors duration-300">
@@ -70,9 +74,87 @@ export default function Navbar() {
 
         {/* CENTER: Desktop nav (absolutely centered) */}
         <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-1">
-          <NavLink to="/events" className={linkClass}>
-            Events
-          </NavLink>
+          <div
+            className="relative"
+            onMouseEnter={() => setEventsOpen(true)}
+            onMouseLeave={() => setEventsOpen(false)}
+            onFocus={() => setEventsOpen(true)}
+            onBlur={(e) => {
+              // close only if focus moved outside of this container
+              const related = (e as React.FocusEvent)
+                .relatedTarget as Node | null;
+              if (
+                !related ||
+                !(e.currentTarget as HTMLElement).contains(related)
+              ) {
+                setEventsOpen(false);
+              }
+            }}
+          >
+            <button
+              aria-haspopup="menu"
+              aria-expanded={eventsOpen}
+              className={`px-3 py-2 inline-flex items-center gap-2 text-sm transition-colors duration-200 ${
+                eventsActive
+                  ? "text-highland-800 dark:text-emerald-200 font-semibold"
+                  : "text-gray-600 hover:text-highland-800 dark:text-gray-300 dark:hover:text-white"
+              }`}
+            >
+              <span>Events</span>
+              <svg
+                viewBox="0 0 20 20"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                className={`transform transition-transform duration-150 ${eventsOpen ? "rotate-180" : "rotate-0"}`}
+                aria-hidden
+              >
+                <path
+                  d="M5 8l5 5 5-5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+
+            <AnimatePresence>
+              {eventsOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.18 }}
+                  className="absolute left-0 mt-2 w-56 rounded-md border bg-white shadow-lg dark:bg-dark-card dark:border-dark-border"
+                >
+                  <div className="py-1">
+                    <Link
+                      to="/events/caber"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-800"
+                      onClick={() => setEventsOpen(false)}
+                    >
+                      Caber Toss
+                    </Link>
+                    <Link
+                      to="/events/tugowar"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-800"
+                      onClick={() => setEventsOpen(false)}
+                    >
+                      Tug o’ War
+                    </Link>
+                    <Link
+                      to="/events/stone"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-neutral-800"
+                      onClick={() => setEventsOpen(false)}
+                    >
+                      Stone Put
+                    </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           <NavLink to="/register" className={linkClass}>
             Register
           </NavLink>
