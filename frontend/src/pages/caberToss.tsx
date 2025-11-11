@@ -158,11 +158,7 @@ export default function CaberToss() {
 
           <h3 className="mt-4 text-sm font-semibold">Gallery</h3>
           <div className="mt-3 grid grid-cols-3 gap-2">
-            {[
-              "/images/caber-toss.jpg",
-              "/images/competitor.jpg",
-              "/images/caber-toss-2.jpg",
-            ].map((src) => (
+            {["/images/caber-toss.jpg", "/images/competitor.jpg"].map((src) => (
               <img
                 key={src}
                 src={src}
