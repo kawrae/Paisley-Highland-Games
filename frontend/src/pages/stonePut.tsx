@@ -54,7 +54,7 @@ export default function StonePut() {
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.12 }}
-            className="relative z-10 h-96 flex items-center justify-center px-6"
+            className="relative z-10 h-80 md:h-96 flex items-center justify-center px-6"
           >
             <div className="text-center text-highland-800 dark:text-white">
               <h1 className="h2 md:text-5xl font-bold dark:drop-shadow-lg">
@@ -74,12 +74,10 @@ export default function StonePut() {
             <div className="flex-1 space-y-4">
               <div>
                 <h2 className="text-lg font-semibold">Overview</h2>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                  Stone Put is a traditional heavy-throw event where competitors
-                  put a heavy stone for distance. This event emphasizes
-                  technique and explosive strength; local rules determine the
-                  allowable stone size and throwing area. Use this page to find
-                  rules, schedules and entry information.
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                  Stone Put is a traditional heavy-throw event where competitors put a heavy stone for distance.
+                  This event emphasizes technique and explosive strength; local rules determine the allowable stone size
+                  and throwing area. Use this page to find rules, schedules and entry information.
                 </p>
               </div>
 
@@ -92,27 +90,24 @@ export default function StonePut() {
                     See the event schedule on the main page or event map.
                   </p>
                 </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                    Format
+                  </h3>
+                  <p className="mt-1 text-gray-600 dark:text-gray-300">
+                    Each athlete has three attempts to put the stone from a standing position.
+                  </p>
+                </div>
               </div>
 
               <div>
-                <motion.div
-                  variants={fadeIn}
-                  initial="hidden"
-                  animate="visible"
-                  transition={{ delay: 0.18 }}
-                  className="mt-2"
+                <Link
+                  to="/register"
+                  aria-label="Register for Stone Put"
+                  className="btn-primary inline-flex items-center gap-2"
                 >
-                  <Link
-                    to="/register"
-                    aria-label="Register for Stone Put"
-                    className="btn-primary inline-flex items-center gap-3"
-                  >
-                    Register
-                  </Link>
-                  <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                    Limited spots! Sign up now
-                  </div>
-                </motion.div>
+                  Register to compete
+                </Link>
               </div>
             </div>
 
@@ -121,8 +116,7 @@ export default function StonePut() {
                 <EventMap focusId="stone" zoomLevel={18} />
               </div>
               <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                <span className="font-semibold">Field location.</span> Find
-                where the Stone Put takes place on the grounds.
+                Exact field location on the games ground.
               </p>
             </div>
           </div>
@@ -131,19 +125,17 @@ export default function StonePut() {
             <div className="card p-6 space-y-6">
               <div>
                 <h3 className="text-sm font-semibold">Entry requirements</h3>
-                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
                   <li>Competitor age and weight categories may apply</li>
                   <li>Signed waiver required</li>
-                  <li>
-                    Competitors should warm up and follow marshal instructions
-                  </li>
+                  <li>Competitors should warm up and follow marshal instructions</li>
                   <li>Arrive 30 minutes before your scheduled time</li>
                 </ul>
               </div>
 
               <div>
                 <h3 className="text-sm font-semibold">Sample schedule</h3>
-                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
                   <li>09:00 — Competitor check-in</li>
                   <li>10:00 — Qualifying rounds</li>
                   <li>12:30 — Break</li>
@@ -153,14 +145,13 @@ export default function StonePut() {
 
               <div>
                 <h3 className="text-sm font-semibold">FAQ</h3>
-                <div className="mt-2 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
                     <summary className="font-medium">
                       What stone sizes are allowed?
                     </summary>
                     <div className="mt-2">
-                      Stone specifications will be listed in the event rules;
-                      please check before competing.
+                      Stone specifications will be listed in the event rules; please check before competing.
                     </div>
                   </details>
                   <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
@@ -168,8 +159,7 @@ export default function StonePut() {
                       Can I practice with my own stone?
                     </summary>
                     <div className="mt-2">
-                      Practice stones are allowed in the warm-up area subject to
-                      marshal approval.
+                      Practice stones are allowed in the warm-up area subject to marshal approval.
                     </div>
                   </details>
                 </div>

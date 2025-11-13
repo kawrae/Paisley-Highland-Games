@@ -56,7 +56,7 @@ export default function CaberToss() {
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.12 }}
-            className="relative z-10 h-96 flex items-center justify-center px-6"
+            className="relative z-10 h-80 md:h-96 flex items-center justify-center px-6"
           >
             <div className="text-center text-highland-800 dark:text-white">
               <h1 className="h2 md:text-5xl font-bold dark:drop-shadow-lg">
@@ -76,11 +76,11 @@ export default function CaberToss() {
             <div className="flex-1 space-y-4">
               <div>
                 <h2 className="text-lg font-semibold">Overview</h2>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                  The Caber Toss is a traditional Scottish strength event.
-                  Competitors aim to toss a large tapered pole (the caber) so
-                  that it turns end over end and lands in the 12 o&apos;clock
-                  position relative to the thrower.
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                  The Caber Toss is a traditional Scottish strength event where competitors lift,
+                  run with, and throw a large tapered pole (the caber). The goal is not distance
+                  but control: the caber should turn end over end and land as close to the perfect
+                  12 o&apos;clock position in front of the thrower as possible.
                 </p>
               </div>
 
@@ -93,27 +93,24 @@ export default function CaberToss() {
                     See the event schedule on the main page or event map.
                   </p>
                 </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                    Format
+                  </h3>
+                  <p className="mt-1 text-gray-600 dark:text-gray-300">
+                    Each athlete has up to three attempts with the same caber.
+                  </p>
+                </div>
               </div>
 
               <div>
-                <motion.div
-                  variants={fadeIn}
-                  initial="hidden"
-                  animate="visible"
-                  transition={{ delay: 0.18 }}
-                  className="mt-2"
+                <Link
+                  to="/register"
+                  aria-label="Register for Caber Toss"
+                  className="btn-primary inline-flex items-center gap-2"
                 >
-                  <Link
-                    to="/register"
-                    aria-label="Register for Caber Toss"
-                    className="btn-primary inline-flex items-center gap-3"
-                  >
-                    Register
-                  </Link>
-                  <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                    Limited spots! Sign up now
-                  </div>
-                </motion.div>
+                  Register to compete
+                </Link>
               </div>
             </div>
 
@@ -122,8 +119,7 @@ export default function CaberToss() {
                 <EventMap focusId="caber" zoomLevel={18} />
               </div>
               <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                <span className="font-semibold">Field location.</span>{" "}
-                Find where the Caber Toss takes place on the grounds.
+                Exact field location on the games ground.
               </p>
             </div>
           </div>
@@ -132,15 +128,13 @@ export default function CaberToss() {
             <div className="card p-6 space-y-6">
               <div>
                 <h3 className="text-sm font-semibold">Entry requirements</h3>
-                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
                   <li>
-                    Minimum age: 18 (under-18s may compete with guardian
-                    consent)
+                    Minimum age: 18 (under-18s may compete with guardian consent)
                   </li>
                   <li>Signed waiver on the day</li>
                   <li>
-                    Competitors should wear closed footwear and arrive 30
-                    minutes early
+                    Competitors should wear closed footwear and arrive 30 minutes early
                   </li>
                   <li>One entry per competitor; club entries accepted</li>
                 </ul>
@@ -148,7 +142,7 @@ export default function CaberToss() {
 
               <div>
                 <h3 className="text-sm font-semibold">Sample schedule</h3>
-                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
                   <li>10:00 — Competitor check-in &amp; warm-up</li>
                   <li>11:00 — Qualifying rounds</li>
                   <li>13:00 — Lunch break</li>
@@ -158,14 +152,13 @@ export default function CaberToss() {
 
               <div>
                 <h3 className="text-sm font-semibold">FAQ</h3>
-                <div className="mt-2 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
                   <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
                     <summary className="font-medium">
                       Can I bring my own caber?
                     </summary>
                     <div className="mt-2">
-                      Yes — but it must meet safety checks by the event marshal
-                      before competing.
+                      Yes — but it must meet safety checks by the event marshal before competing.
                     </div>
                   </details>
                   <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
@@ -173,8 +166,7 @@ export default function CaberToss() {
                       Are spectators allowed near the arena?
                     </summary>
                     <div className="mt-2">
-                      Spectators may watch from designated viewing areas for
-                      safety.
+                      Spectators may watch from designated viewing areas for safety.
                     </div>
                   </details>
                 </div>
@@ -250,7 +242,6 @@ export default function CaberToss() {
   );
 }
 
-
 function LeaderboardCard() {
   type Item = {
     _id: string;
@@ -316,7 +307,7 @@ function LeaderboardCard() {
       {loading ? (
         <div className="mt-3 text-sm text-gray-500">Loading…</div>
       ) : err ? (
-        <div className="mt-3 text-sm text-red-600">{err}</div>
+        <div className="mt-3 text-sm text-red-600">Could not load results</div>
       ) : items.length === 0 ? (
         <div className="mt-3 text-sm text-gray-600">No results yet</div>
       ) : (
