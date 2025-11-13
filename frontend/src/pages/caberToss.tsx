@@ -9,22 +9,20 @@ export default function CaberToss() {
   const [lightbox, setLightbox] = useState<string | null>(null);
 
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setLightbox(null);
-    };
+    const handleEscape = (e: KeyboardEvent) =>
+      e.key === "Escape" && setLightbox(null);
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
   }, []);
 
   return (
     <>
-      <section className="w-full mb-8">
+      <section className="w-full mb-8 relative z-[1]">
         <motion.div
           variants={fadeIn}
           initial="hidden"
           animate="visible"
           className="relative w-full overflow-hidden"
-          aria-label="Caber Toss hero"
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -52,17 +50,15 @@ export default function CaberToss() {
           <div className="absolute left-0 right-0 bottom-0 h-48 pointer-events-none bg-gradient-to-b from-transparent to-white dark:to-[#0a0a0a]" />
 
           <motion.div
-            variants={fadeIn}
+            variants={fadeUp}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.12 }}
             className="relative z-10 h-80 md:h-96 flex items-center justify-center px-6"
           >
             <div className="text-center text-highland-800 dark:text-white">
-              <h1 className="h2 md:text-5xl font-bold dark:drop-shadow-lg">
-                Caber Toss
-              </h1>
-              <p className="lead mt-2 text-sm md:text-base opacity-90 text-highland-800 dark:text-white">
+              <h1 className="h2 md:text-5xl font-bold">Caber Toss</h1>
+              <p className="lead mt-2 text-sm md:text-base opacity-90 dark:text-white">
                 Details about the Caber Toss event, rules and schedule.
               </p>
             </div>
@@ -70,17 +66,26 @@ export default function CaberToss() {
         </motion.div>
       </section>
 
-      <section className="container-page section">
-        <div className="space-y-6">
-          <div className="card p-6 lg:p-7 lg:flex lg:items-stretch lg:gap-8">
+      <section className="container-page section relative z-[1]">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+          className="space-y-6"
+        >
+          <motion.div
+            variants={fadeUp}
+            className="card p-6 lg:p-7 lg:flex lg:items-stretch lg:gap-8 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+          >
             <div className="flex-1 space-y-4">
               <div>
                 <h2 className="text-lg font-semibold">Overview</h2>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                  The Caber Toss is a traditional Scottish strength event where competitors lift,
-                  run with, and throw a large tapered pole (the caber). The goal is not distance
-                  but control: the caber should turn end over end and land as close to the perfect
-                  12 o&apos;clock position in front of the thrower as possible.
+                  The Caber Toss is a traditional Scottish strength event where
+                  competitors lift, run with, and throw a large tapered pole
+                  (the caber). The goal is not distance but control: the caber
+                  should turn end over end and land as close to the perfect 12
+                  o’clock position in front of the thrower as possible.
                 </p>
               </div>
 
@@ -106,7 +111,6 @@ export default function CaberToss() {
               <div>
                 <Link
                   to="/register"
-                  aria-label="Register for Caber Toss"
                   className="btn-primary inline-flex items-center gap-2"
                 >
                   Register to compete
@@ -114,28 +118,27 @@ export default function CaberToss() {
               </div>
             </div>
 
-            <div className="mt-6 lg:mt-0 lg:w-[320px] xl:w-[360px] shrink-0">
-              <div className="h-[240px] md:h-[260px] rounded-xl overflow-hidden border border-gray-200 dark:border-[#3a4742]">
+            <div className="mt-6 lg:mt-0 lg:w-[320px] xl:w-[360px] shrink-0 relative z-[1]">
+              <div className="h-[240px] md:h-[260px] rounded-xl overflow-hidden border border-gray-200 dark:border-dark-border relative z-[1]">
                 <EventMap focusId="caber" zoomLevel={18} />
               </div>
               <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                 Exact field location on the games ground.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1.1fr)] gap-6 items-start">
-            <div className="card p-6 space-y-6">
+            <motion.div
+              variants={fadeUp}
+              className="card p-6 space-y-6 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+            >
               <div>
                 <h3 className="text-sm font-semibold">Entry requirements</h3>
                 <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
-                  <li>
-                    Minimum age: 18 (under-18s may compete with guardian consent)
-                  </li>
-                  <li>Signed waiver on the day</li>
-                  <li>
-                    Competitors should wear closed footwear and arrive 30 minutes early
-                  </li>
+                  <li>Minimum age 18 (under-18s require guardian consent)</li>
+                  <li>Signed waiver required</li>
+                  <li>Closed footwear recommended; arrive 30 minutes early</li>
                   <li>One entry per competitor; club entries accepted</li>
                 </ul>
               </div>
@@ -143,7 +146,7 @@ export default function CaberToss() {
               <div>
                 <h3 className="text-sm font-semibold">Sample schedule</h3>
                 <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
-                  <li>10:00 — Competitor check-in &amp; warm-up</li>
+                  <li>10:00 — Competitor check-in & warm-up</li>
                   <li>11:00 — Qualifying rounds</li>
                   <li>13:00 — Lunch break</li>
                   <li>14:00 — Finals</li>
@@ -158,25 +161,31 @@ export default function CaberToss() {
                       Can I bring my own caber?
                     </summary>
                     <div className="mt-2">
-                      Yes — but it must meet safety checks by the event marshal before competing.
+                      Yes — but it must meet safety checks by the event marshal
+                      before competing.
                     </div>
                   </details>
+
                   <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
                     <summary className="font-medium">
                       Are spectators allowed near the arena?
                     </summary>
                     <div className="mt-2">
-                      Spectators may watch from designated viewing areas for safety.
+                      Spectators may watch from designated viewing areas for
+                      safety.
                     </div>
                   </details>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             <div className="space-y-6">
               <LeaderboardCard />
 
-              <div className="card p-4">
+              <motion.div
+                variants={fadeUp}
+                className="card p-4 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+              >
                 <h3 className="text-sm font-semibold">Watch a Caber Toss</h3>
                 <div
                   className="mt-3 relative rounded-lg overflow-hidden"
@@ -190,16 +199,18 @@ export default function CaberToss() {
                     allowFullScreen
                   />
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="card p-4">
+              <motion.div
+                variants={fadeUp}
+                className="card p-4 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+              >
                 <h3 className="text-sm font-semibold">Gallery</h3>
                 <div className="mt-3 grid grid-cols-3 gap-2">
                   {["/images/caber-toss.jpg", "/images/competitor.jpg"].map(
                     (src) => (
                       <button
                         key={src}
-                        type="button"
                         className="relative block w-full h-20 rounded-md overflow-hidden focus:outline-none focus:ring-2 focus:ring-highland-500"
                         onClick={() => setLightbox(src)}
                       >
@@ -212,28 +223,28 @@ export default function CaberToss() {
                     )
                   )}
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {lightbox && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
           onClick={() => setLightbox(null)}
         >
           <div className="relative p-4" onClick={(e) => e.stopPropagation()}>
             <button
-              className="absolute top-2 right-2 rounded bg-black/40 text-white p-2"
+              className="absolute top-2 right-2 rounded bg-black/40 text-white px-2 py-1 text-xs"
               onClick={() => setLightbox(null)}
             >
               Close
             </button>
             <img
               src={lightbox}
-              alt="lightbox"
-              className="max-w-[90vw] max-h-[80vh] rounded"
+              alt="caber"
+              className="max-w-[90vw] max-h-[80vh] rounded-lg"
             />
           </div>
         </div>
@@ -251,6 +262,7 @@ function LeaderboardCard() {
     score: number;
     eventId?: string;
   };
+
   const [items, setItems] = useState<Item[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
@@ -259,7 +271,6 @@ function LeaderboardCard() {
   useEffect(() => {
     let mounted = true;
     setLoading(true);
-    setErr(null);
     api
       .get("/results")
       .then((r) => {
@@ -267,32 +278,32 @@ function LeaderboardCard() {
         const all: Item[] = r.data || [];
         const caber = all.filter((x) => x.eventId === "caber");
         setTotalCount(caber.length);
-        const top = caber.sort((a, b) => a.position - b.position).slice(0, 5);
-        setItems(top);
+        setItems(caber.sort((a, b) => a.position - b.position).slice(0, 5));
       })
-      .catch(() => {
-        if (!mounted) return;
-        setErr("Could not load results");
-      })
+      .catch(() => mounted && setErr("Could not load results"))
       .finally(() => mounted && setLoading(false));
     return () => {
       mounted = false;
     };
   }, []);
 
-  const Medal = ({ pos }: { pos: number }) => {
-    if (pos === 1) return <span title="1st">🥇</span>;
-    if (pos === 2) return <span title="2nd">🥈</span>;
-    if (pos === 3) return <span title="3rd">🥉</span>;
-    return <span className="text-gray-400 dark:text-gray-500">#{pos}</span>;
-  };
+  const Medal = ({ pos }: { pos: number }) =>
+    pos === 1 ? (
+      <span>🥇</span>
+    ) : pos === 2 ? (
+      <span>🥈</span>
+    ) : pos === 3 ? (
+      <span>🥉</span>
+    ) : (
+      <span className="text-gray-400 dark:text-gray-500">#{pos}</span>
+    );
 
   return (
     <motion.div
       variants={fadeUp}
       initial="hidden"
       animate="visible"
-      className="card p-4"
+      className="card p-4 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
     >
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">Caber Toss — Top results</h3>
@@ -307,7 +318,7 @@ function LeaderboardCard() {
       {loading ? (
         <div className="mt-3 text-sm text-gray-500">Loading…</div>
       ) : err ? (
-        <div className="mt-3 text-sm text-red-600">Could not load results</div>
+        <div className="mt-3 text-sm text-red-600">{err}</div>
       ) : items.length === 0 ? (
         <div className="mt-3 text-sm text-gray-600">No results yet</div>
       ) : (
@@ -321,7 +332,7 @@ function LeaderboardCard() {
             <motion.li
               key={it._id}
               variants={fieldFade}
-              className="flex items-center justify-between"
+              className="flex items-center justify-between text-sm"
             >
               <div className="flex items-center gap-3">
                 <div className="text-xl">
@@ -340,14 +351,15 @@ function LeaderboardCard() {
                 <div className="font-semibold text-highland-800 dark:text-dark-heading">
                   {it.score}
                 </div>
-                <div className="text-xs text-gray-500">#{it.position}</div>
+                <div className="text-[11px] text-gray-500">#{it.position}</div>
               </div>
             </motion.li>
           ))}
         </motion.ol>
       )}
+
       {totalCount > items.length && (
-        <div className="mt-2 text-xs text-gray-500">
+        <div className="mt-2 text-[11px] text-gray-500">
           Showing top {items.length} of {totalCount} results
         </div>
       )}

@@ -16,13 +16,12 @@ export default function TugOWar() {
 
   return (
     <>
-      <section className="w-full mb-8">
+      <section className="w-full mb-8 relative z-[1]">
         <motion.div
           variants={fadeIn}
           initial="hidden"
           animate="visible"
           className="relative w-full overflow-hidden"
-          aria-label="Tug o' War hero"
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -50,16 +49,14 @@ export default function TugOWar() {
           <div className="absolute left-0 right-0 bottom-0 h-48 pointer-events-none bg-gradient-to-b from-transparent to-white dark:to-[#0a0a0a]" />
 
           <motion.div
-            variants={fadeIn}
+            variants={fadeUp}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.12 }}
             className="relative z-10 h-80 md:h-96 flex items-center justify-center px-6"
           >
             <div className="text-center text-highland-800 dark:text-white">
-              <h1 className="h2 md:text-5xl font-bold dark:drop-shadow-lg">
-                Tug o&apos; War
-              </h1>
+              <h1 className="h2 md:text-5xl font-bold">{`Tug o' War`}</h1>
               <p className="lead mt-2 text-sm md:text-base opacity-90 text-highland-800 dark:text-white">
                 Rules, schedule and results for the Tug o&apos; War event.
               </p>
@@ -68,9 +65,17 @@ export default function TugOWar() {
         </motion.div>
       </section>
 
-      <section className="container-page section">
-        <div className="space-y-6">
-          <div className="card p-6 lg:p-7 lg:flex lg:items-stretch lg:gap-8">
+      <section className="container-page section relative z-[1]">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+          className="space-y-6"
+        >
+          <motion.div
+            variants={fadeUp}
+            className="card p-6 lg:p-7 lg:flex lg:items-stretch lg:gap-8 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+          >
             <div className="flex-1 space-y-4">
               <div>
                 <h2 className="text-lg font-semibold">Overview</h2>
@@ -106,7 +111,6 @@ export default function TugOWar() {
               <div>
                 <Link
                   to="/register"
-                  aria-label="Register for Tug o' War"
                   className="btn-primary inline-flex items-center gap-2"
                 >
                   Register to compete
@@ -114,18 +118,21 @@ export default function TugOWar() {
               </div>
             </div>
 
-            <div className="mt-6 lg:mt-0 lg:w-[320px] xl:w-[360px] shrink-0">
-              <div className="h-[240px] md:h-[260px] rounded-xl overflow-hidden border border-gray-200 dark:border-[#3a4742]">
+            <div className="mt-6 lg:mt-0 lg:w-[320px] xl:w-[360px] shrink-0 relative z-[1]">
+              <div className="h-[240px] md:h-[260px] rounded-xl overflow-hidden border border-gray-200 dark:border-dark-border relative z-[1]">
                 <EventMap focusId="tug" zoomLevel={18} />
               </div>
               <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                 Exact field location on the games ground.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1.1fr)] gap-6 items-start">
-            <div className="card p-6 space-y-6">
+            <motion.div
+              variants={fadeUp}
+              className="card p-6 space-y-6 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+            >
               <div>
                 <h3 className="text-sm font-semibold">Entry requirements</h3>
                 <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
@@ -141,10 +148,10 @@ export default function TugOWar() {
               <div>
                 <h3 className="text-sm font-semibold">Sample schedule</h3>
                 <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
-                  <li>09:30 — Team check-in &amp; briefing</li>
+                  <li>09:30 — Team check-in & briefing</li>
                   <li>10:00 — Heats</li>
                   <li>12:30 — Lunch break</li>
-                  <li>14:00 — Finals &amp; medal ceremony</li>
+                  <li>14:00 — Finals & medal ceremony</li>
                 </ul>
               </div>
 
@@ -160,6 +167,7 @@ export default function TugOWar() {
                       first match, subject to marshal approval.
                     </div>
                   </details>
+
                   <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
                     <summary className="font-medium">
                       Are spectators allowed near the field?
@@ -171,12 +179,15 @@ export default function TugOWar() {
                   </details>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             <div className="space-y-6">
               <LeaderboardCard />
 
-              <div className="card p-4">
+              <motion.div
+                variants={fadeUp}
+                className="card p-4 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+              >
                 <h3 className="text-sm font-semibold">Watch Tug o&apos; War</h3>
                 <div
                   className="mt-3 relative rounded-lg overflow-hidden"
@@ -190,9 +201,12 @@ export default function TugOWar() {
                     allowFullScreen
                   />
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="card p-4">
+              <motion.div
+                variants={fadeUp}
+                className="card p-4 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+              >
                 <h3 className="text-sm font-semibold">Gallery</h3>
                 <div className="mt-3 grid grid-cols-3 gap-2">
                   {[
@@ -214,10 +228,10 @@ export default function TugOWar() {
                     </button>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {lightbox && (
@@ -240,23 +254,6 @@ export default function TugOWar() {
           </div>
         </div>
       )}
-
-      {/* register to compete CTA */}
-      {/* <motion.div
-        variants={fadeIn}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 0.35 }}
-        className="fixed bottom-6 right-6 z-40"
-      >
-        <Link
-          to="/register"
-          aria-label="Register for Tug o' War"
-          className="btn-primary inline-flex items-center gap-2 px-5 py-3"
-        >
-          Register for Tug o&apos; War
-        </Link>
-      </motion.div> */}
     </>
   );
 }
@@ -297,9 +294,9 @@ function LeaderboardCard() {
   }, []);
 
   const Medal = ({ pos }: { pos: number }) => {
-    if (pos === 1) return <span title="1st">🥇</span>;
-    if (pos === 2) return <span title="2nd">🥈</span>;
-    if (pos === 3) return <span title="3rd">🥉</span>;
+    if (pos === 1) return <span>🥇</span>;
+    if (pos === 2) return <span>🥈</span>;
+    if (pos === 3) return <span>🥉</span>;
     return <span className="text-gray-400 dark:text-gray-500">#{pos}</span>;
   };
 
@@ -308,10 +305,10 @@ function LeaderboardCard() {
       variants={fadeUp}
       initial="hidden"
       animate="visible"
-      className="card p-4"
+      className="card p-4 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold">Tug o&apos; War — Top results</h3>
+        <h3 className="text-sm font-semibold">{`Tug o' War — Top results`}</h3>
         <Link
           to="/leaderboard"
           className="text-xs text-highland-800 dark:text-highland-300 hover:underline"

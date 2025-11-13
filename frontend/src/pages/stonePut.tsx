@@ -16,13 +16,12 @@ export default function StonePut() {
 
   return (
     <>
-      <section className="w-full mb-8">
+      <section className="w-full mb-8 relative z-[1]">
         <motion.div
           variants={fadeIn}
           initial="hidden"
           animate="visible"
           className="relative w-full overflow-hidden"
-          aria-label="Stone Put hero"
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -50,16 +49,14 @@ export default function StonePut() {
           <div className="absolute left-0 right-0 bottom-0 h-48 pointer-events-none bg-gradient-to-b from-transparent to-white dark:to-[#0a0a0a]" />
 
           <motion.div
-            variants={fadeIn}
+            variants={fadeUp}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.12 }}
             className="relative z-10 h-80 md:h-96 flex items-center justify-center px-6"
           >
             <div className="text-center text-highland-800 dark:text-white">
-              <h1 className="h2 md:text-5xl font-bold dark:drop-shadow-lg">
-                Stone Put
-              </h1>
+              <h1 className="h2 md:text-5xl font-bold">Stone Put</h1>
               <p className="lead mt-2 text-sm md:text-base opacity-90 text-highland-800 dark:text-white">
                 Details about the Stone Put event, rules and schedule.
               </p>
@@ -68,16 +65,26 @@ export default function StonePut() {
         </motion.div>
       </section>
 
-      <section className="container-page section">
-        <div className="space-y-6">
-          <div className="card p-6 lg:p-7 lg:flex lg:items-stretch lg:gap-8">
+      <section className="container-page section relative z-[1]">
+        <motion.div
+          variants={stagger}
+          initial="hidden"
+          animate="visible"
+          className="space-y-6"
+        >
+          <motion.div
+            variants={fadeUp}
+            className="card p-6 lg:p-7 lg:flex lg:items-stretch lg:gap-8 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+          >
             <div className="flex-1 space-y-4">
               <div>
                 <h2 className="text-lg font-semibold">Overview</h2>
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
-                  Stone Put is a traditional heavy-throw event where competitors put a heavy stone for distance.
-                  This event emphasizes technique and explosive strength; local rules determine the allowable stone size
-                  and throwing area. Use this page to find rules, schedules and entry information.
+                  Stone Put is a traditional heavy-throw event where competitors
+                  put a heavy stone for distance. This event emphasizes
+                  technique and explosive strength; local rules determine the
+                  allowable stone size and throwing area. Use this page to find
+                  rules, schedules and entry information.
                 </p>
               </div>
 
@@ -95,7 +102,8 @@ export default function StonePut() {
                     Format
                   </h3>
                   <p className="mt-1 text-gray-600 dark:text-gray-300">
-                    Each athlete has three attempts to put the stone from a standing position.
+                    Each athlete has three attempts to put the stone from a
+                    standing position.
                   </p>
                 </div>
               </div>
@@ -103,7 +111,6 @@ export default function StonePut() {
               <div>
                 <Link
                   to="/register"
-                  aria-label="Register for Stone Put"
                   className="btn-primary inline-flex items-center gap-2"
                 >
                   Register to compete
@@ -111,24 +118,27 @@ export default function StonePut() {
               </div>
             </div>
 
-            <div className="mt-6 lg:mt-0 lg:w-[320px] xl:w-[360px] shrink-0">
-              <div className="h-[240px] md:h-[260px] rounded-xl overflow-hidden border border-gray-200 dark:border-[#3a4742]">
+            <div className="mt-6 lg:mt-0 lg:w-[320px] xl:w-[360px] shrink-0 relative z-[1]">
+              <div className="h-[240px] md:h-[260px] rounded-xl overflow-hidden border border-gray-200 dark:border-dark-border relative z-[1]">
                 <EventMap focusId="stone" zoomLevel={18} />
               </div>
               <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
                 Exact field location on the games ground.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1.1fr)] gap-6 items-start">
-            <div className="card p-6 space-y-6">
+            <motion.div
+              variants={fadeUp}
+              className="card p-6 space-y-6 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+            >
               <div>
                 <h3 className="text-sm font-semibold">Entry requirements</h3>
                 <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
                   <li>Competitor age and weight categories may apply</li>
                   <li>Signed waiver required</li>
-                  <li>Competitors should warm up and follow marshal instructions</li>
+                  <li>Warm up and follow marshal instructions</li>
                   <li>Arrive 30 minutes before your scheduled time</li>
                 </ul>
               </div>
@@ -151,25 +161,31 @@ export default function StonePut() {
                       What stone sizes are allowed?
                     </summary>
                     <div className="mt-2">
-                      Stone specifications will be listed in the event rules; please check before competing.
+                      Stone specifications will be listed in the event rules;
+                      please check before competing.
                     </div>
                   </details>
+
                   <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
                     <summary className="font-medium">
                       Can I practice with my own stone?
                     </summary>
                     <div className="mt-2">
-                      Practice stones are allowed in the warm-up area subject to marshal approval.
+                      Practice stones are allowed in the warm-up area subject to
+                      marshal approval.
                     </div>
                   </details>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             <div className="space-y-6">
               <LeaderboardCard />
 
-              <div className="card p-4">
+              <motion.div
+                variants={fadeUp}
+                className="card p-4 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+              >
                 <h3 className="text-sm font-semibold">Watch Stone Put</h3>
                 <div
                   className="mt-3 relative rounded-lg overflow-hidden"
@@ -183,9 +199,12 @@ export default function StonePut() {
                     allowFullScreen
                   />
                 </div>
-              </div>
+              </motion.div>
 
-              <div className="card p-4">
+              <motion.div
+                variants={fadeUp}
+                className="card p-4 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
+              >
                 <h3 className="text-sm font-semibold">Gallery</h3>
                 <div className="mt-3 grid grid-cols-3 gap-2">
                   {["/images/stone-put.jpg", "/images/competitor.jpg"].map(
@@ -205,28 +224,28 @@ export default function StonePut() {
                     )
                   )}
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {lightbox && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
           onClick={() => setLightbox(null)}
         >
           <div className="relative p-4" onClick={(e) => e.stopPropagation()}>
             <button
-              className="absolute top-2 right-2 rounded bg-black/40 text-white p-2"
+              className="absolute top-2 right-2 rounded bg-black/40 text-white px-2 py-1 text-xs"
               onClick={() => setLightbox(null)}
             >
               Close
             </button>
             <img
               src={lightbox}
-              alt="lightbox"
-              className="max-w-[90vw] max-h-[80vh] rounded"
+              alt="stone"
+              className="max-w-[90vw] max-h-[80vh] rounded-lg"
             />
           </div>
         </div>
@@ -244,6 +263,7 @@ function LeaderboardCard() {
     score: number;
     eventId?: string;
   };
+
   const [items, setItems] = useState<Item[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [loading, setLoading] = useState(false);
@@ -271,9 +291,9 @@ function LeaderboardCard() {
   }, []);
 
   const Medal = ({ pos }: { pos: number }) => {
-    if (pos === 1) return <span title="1st">🥇</span>;
-    if (pos === 2) return <span title="2nd">🥈</span>;
-    if (pos === 3) return <span title="3rd">🥉</span>;
+    if (pos === 1) return <span>🥇</span>;
+    if (pos === 2) return <span>🥈</span>;
+    if (pos === 3) return <span>🥉</span>;
     return <span className="text-gray-400 dark:text-gray-500">#{pos}</span>;
   };
 
@@ -282,7 +302,7 @@ function LeaderboardCard() {
       variants={fadeUp}
       initial="hidden"
       animate="visible"
-      className="card p-4"
+      className="card p-4 dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
     >
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">Stone Put — Top results</h3>
@@ -311,7 +331,7 @@ function LeaderboardCard() {
             <motion.li
               key={it._id}
               variants={fieldFade}
-              className="flex items-center justify-between"
+              className="flex items-center justify-between text-sm"
             >
               <div className="flex items-center gap-3">
                 <div className="text-xl">
@@ -330,14 +350,15 @@ function LeaderboardCard() {
                 <div className="font-semibold text-highland-800 dark:text-dark-heading">
                   {it.score}
                 </div>
-                <div className="text-xs text-gray-500">#{it.position}</div>
+                <div className="text-[11px] text-gray-500">#{it.position}</div>
               </div>
             </motion.li>
           ))}
         </motion.ol>
       )}
+
       {totalCount > items.length && (
-        <div className="mt-2 text-xs text-gray-500">
+        <div className="mt-2 text-[11px] text-gray-500">
           Showing top {items.length} of {totalCount} results
         </div>
       )}
