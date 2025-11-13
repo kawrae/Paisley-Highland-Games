@@ -39,7 +39,9 @@ export default function Events() {
         </p>
       </motion.div>
 
-      <EventMap />
+      <div className="relative z-0 mt-4 event-map-wrapper">
+        <EventMap />
+      </div>
 
       <motion.div
         variants={formStagger}
@@ -54,10 +56,7 @@ export default function Events() {
             whileHover={{ scale: 1.02 }}
             className="group"
           >
-            <Link
-              to={x.link}
-              className="block overflow-hidden rounded-2xl border bg-white shadow-soft hover:shadow-lg transition dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
-            >
+            <div className="block overflow-hidden rounded-2xl border bg-white shadow-soft hover:shadow-lg transition dark:bg-dark-card dark:border-dark-border dark:shadow-softDark">
               <div className="h-40 overflow-hidden">
                 <img
                   src={x.img}
@@ -65,6 +64,7 @@ export default function Events() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
+
               <div className="p-6">
                 <h3 className="text-lg font-semibold text-highland-800 dark:text-dark-heading">
                   {x.title}
@@ -72,11 +72,15 @@ export default function Events() {
                 <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                   {x.desc}
                 </p>
-                <div className="mt-4 text-sm text-highland-700 dark:text-highland-300 font-medium">
+
+                <Link
+                  to={x.link}
+                  className="mt-4 inline-block text-sm text-highland-700 dark:text-highland-300 font-medium hover:underline"
+                >
                   Learn more →
-                </div>
+                </Link>
               </div>
-            </Link>
+            </div>
           </motion.div>
         ))}
       </motion.div>
