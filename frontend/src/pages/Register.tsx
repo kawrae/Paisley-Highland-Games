@@ -136,7 +136,7 @@ export default function Register() {
         variants={fadeIn}
         initial="hidden"
         animate="visible"
-        className="mx-auto max-w-5xl overflow-hidden rounded-2xl border bg-white shadow-soft
+        className="w-full overflow-hidden rounded-2xl border bg-white shadow-soft
                    dark:bg-dark-card dark:border-dark-border dark:shadow-softDark"
       >
         <div className="grid md:grid-cols-2">
