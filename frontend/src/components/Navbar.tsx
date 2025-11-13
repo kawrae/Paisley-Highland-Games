@@ -59,9 +59,7 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-white/70 backdrop-blur dark:bg-neutral-900/60 dark:border-neutral-800 transition-colors duration-300">
-      {/* Row */}
       <div className="container-page h-14 relative flex items-center justify-between">
-        {/* LEFT: Brand */}
         <Link
           to="/"
           className="text-highland-800 dark:text-emerald-100 font-[Fraunces] font-bold tracking-tight"
@@ -72,7 +70,6 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* CENTER: Desktop nav (absolutely centered) */}
         <nav className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-1">
           <div
             className="relative"
@@ -80,18 +77,14 @@ export default function Navbar() {
             onMouseLeave={() => setEventsOpen(false)}
             onFocus={() => setEventsOpen(true)}
             onBlur={(e) => {
-              // close only if focus moved outside of this container
-              const related = (e as React.FocusEvent)
-                .relatedTarget as Node | null;
-              if (
-                !related ||
-                !(e.currentTarget as HTMLElement).contains(related)
-              ) {
+              const related = (e as React.FocusEvent).relatedTarget as Node | null;
+              if (!related || !(e.currentTarget as HTMLElement).contains(related)) {
                 setEventsOpen(false);
               }
             }}
           >
-            <button
+            <NavLink
+              to="/events"
               aria-haspopup="menu"
               aria-expanded={eventsOpen}
               className={`px-3 py-2 inline-flex items-center gap-2 text-sm transition-colors duration-200 ${
@@ -108,7 +101,9 @@ export default function Navbar() {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="1.5"
-                className={`transform transition-transform duration-150 ${eventsOpen ? "rotate-180" : "rotate-0"}`}
+                className={`transform transition-transform duration-150 ${
+                  eventsOpen ? "rotate-180" : "rotate-0"
+                }`}
                 aria-hidden
               >
                 <path
@@ -117,7 +112,7 @@ export default function Navbar() {
                   strokeLinejoin="round"
                 />
               </svg>
-            </button>
+            </NavLink>
 
             <AnimatePresence>
               {eventsOpen && (
@@ -155,6 +150,7 @@ export default function Navbar() {
               )}
             </AnimatePresence>
           </div>
+
           <NavLink to="/register" className={linkClass}>
             Register
           </NavLink>
@@ -193,9 +189,7 @@ export default function Navbar() {
           )}
         </nav>
 
-        {/* RIGHT: actions (hamburger then theme; theme is far right) */}
         <div className="flex items-center gap-1">
-          {/* Mobile hamburger */}
           <button
             aria-label="Toggle menu"
             className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg hover:bg-black/5 dark:hover:bg-white/10"
@@ -225,12 +219,10 @@ export default function Navbar() {
             </svg>
           </button>
 
-          {/* Theme at FAR RIGHT */}
           <ThemeToggle />
         </div>
       </div>
 
-      {/* MOBILE SHEET */}
       {open && (
         <div className="md:hidden border-t bg-white/95 backdrop-blur dark:bg-neutral-900/90 dark:border-neutral-800">
           <div className="container-page py-2">
@@ -251,8 +243,6 @@ export default function Navbar() {
                   {item.charAt(0).toUpperCase() + item.slice(1)}
                 </NavLink>
               ))}
-
-              {/* Removed the duplicate ThemeToggle from the sheet */}
 
               {user ? (
                 <>
