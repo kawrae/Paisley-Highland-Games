@@ -16,7 +16,6 @@ export default function StonePut() {
 
   return (
     <>
-      {/* Full-bleed hero */}
       <section className="w-full mb-8">
         <motion.div
           variants={fadeIn}
@@ -48,7 +47,7 @@ export default function StonePut() {
             <div className="h-full w-full bg-gradient-to-b from-white/70 via-transparent to-transparent dark:from-black/60" />
           </motion.div>
 
-          <div className=" absolute left-0 right-0 bottom-0 h-48 pointer-events-none bg-gradient-to-b from-transparent to-white dark:to-[#0a0a0a]" />
+          <div className="absolute left-0 right-0 bottom-0 h-48 pointer-events-none bg-gradient-to-b from-transparent to-white dark:to-[#0a0a0a]" />
 
           <motion.div
             variants={fadeIn}
@@ -70,127 +69,158 @@ export default function StonePut() {
       </section>
 
       <section className="container-page section">
-        <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-start">
-          <div>
-            <div className="rounded-2xl border bg-white p-6 shadow-soft dark:bg-dark-card dark:border-dark-border h-full flex flex-col justify-center">
-              <h2 className="text-lg font-semibold">Overview</h2>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                Stone Put is a traditional heavy-throw event where competitors
-                put a heavy stone for distance. This event emphasizes technique
-                and explosive strength; local rules determine the allowable
-                stone size and throwing area. Use this page to find rules,
-                schedules and entry information.
-              </p>
+        <div className="space-y-6">
+          <div className="card p-6 lg:p-7 lg:flex lg:items-stretch lg:gap-8">
+            <div className="flex-1 space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold">Overview</h2>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                  Stone Put is a traditional heavy-throw event where competitors
+                  put a heavy stone for distance. This event emphasizes
+                  technique and explosive strength; local rules determine the
+                  allowable stone size and throwing area. Use this page to find
+                  rules, schedules and entry information.
+                </p>
+              </div>
 
-              <h3 className="mt-4 text-sm font-medium">When</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                See the event schedule on the main page or event map.
-              </p>
-
-              <motion.div
-                variants={fadeIn}
-                initial="hidden"
-                animate="visible"
-                transition={{ delay: 0.18 }}
-                className="mt-4"
-              >
-                <Link
-                  to="/register"
-                  aria-label="Register for Stone Put"
-                  className="btn-primary inline-flex items-center gap-3"
-                >
-                  Register
-                </Link>
-                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                  Limited spots! Sign up now
+              <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                    When
+                  </h3>
+                  <p className="mt-1 text-gray-600 dark:text-gray-300">
+                    See the event schedule on the main page or event map.
+                  </p>
                 </div>
-              </motion.div>
+              </div>
+
+              <div>
+                <motion.div
+                  variants={fadeIn}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ delay: 0.18 }}
+                  className="mt-2"
+                >
+                  <Link
+                    to="/register"
+                    aria-label="Register for Stone Put"
+                    className="btn-primary inline-flex items-center gap-3"
+                  >
+                    Register
+                  </Link>
+                  <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    Limited spots! Sign up now
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+
+            <div className="mt-6 lg:mt-0 lg:w-[320px] xl:w-[360px] shrink-0">
+              <div className="h-[240px] md:h-[260px] rounded-xl overflow-hidden border border-gray-200 dark:border-[#3a4742]">
+                <EventMap focusId="stone" zoomLevel={18} />
+              </div>
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                <span className="font-semibold">Field location.</span> Find
+                where the Stone Put takes place on the grounds.
+              </p>
             </div>
           </div>
 
-          <div className="relative z-0">
-            <EventMap focusId="stone" zoomLevel={18} />
+          <div className="grid lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1.1fr)] gap-6 items-start">
+            <div className="card p-6 space-y-6">
+              <div>
+                <h3 className="text-sm font-semibold">Entry requirements</h3>
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
+                  <li>Competitor age and weight categories may apply</li>
+                  <li>Signed waiver required</li>
+                  <li>
+                    Competitors should warm up and follow marshal instructions
+                  </li>
+                  <li>Arrive 30 minutes before your scheduled time</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold">Sample schedule</h3>
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
+                  <li>09:00 — Competitor check-in</li>
+                  <li>10:00 — Qualifying rounds</li>
+                  <li>12:30 — Break</li>
+                  <li>13:30 — Finals</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold">FAQ</h3>
+                <div className="mt-2 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                  <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
+                    <summary className="font-medium">
+                      What stone sizes are allowed?
+                    </summary>
+                    <div className="mt-2">
+                      Stone specifications will be listed in the event rules;
+                      please check before competing.
+                    </div>
+                  </details>
+                  <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
+                    <summary className="font-medium">
+                      Can I practice with my own stone?
+                    </summary>
+                    <div className="mt-2">
+                      Practice stones are allowed in the warm-up area subject to
+                      marshal approval.
+                    </div>
+                  </details>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <LeaderboardCard />
+
+              <div className="card p-4">
+                <h3 className="text-sm font-semibold">Watch Stone Put</h3>
+                <div
+                  className="mt-3 relative rounded-lg overflow-hidden"
+                  style={{ paddingBottom: "56.25%", height: 0 }}
+                >
+                  <iframe
+                    title="Stone Put example"
+                    src="https://www.youtube.com/embed/DDLwMYy_UZs?si=EMj9uqlXyYEdTgq9"
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+
+              <div className="card p-4">
+                <h3 className="text-sm font-semibold">Gallery</h3>
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {["/images/stone-put.jpg", "/images/competitor.jpg"].map(
+                    (src) => (
+                      <button
+                        key={src}
+                        type="button"
+                        className="relative block w-full h-20 rounded-md overflow-hidden focus:outline-none focus:ring-2 focus:ring-highland-500"
+                        onClick={() => setLightbox(src)}
+                      >
+                        <img
+                          src={src}
+                          alt="stone"
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    )
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <motion.div
-          variants={fadeIn}
-          initial="hidden"
-          animate="visible"
-          transition={{ delay: 0.28 }}
-          className="mt-6 rounded-2xl border bg-white p-6 shadow-soft dark:bg-dark-card dark:border-dark-border"
-        >
-          {/* Stone Put leaderboard (top 5) */}
-          <LeaderboardCard />
-
-          <h3 className="text-sm font-semibold">Entry requirements</h3>
-          <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
-            <li>Competitor age and weight categories may apply</li>
-            <li>Signed waiver required</li>
-            <li>Competitors should warm up and follow marshal instructions</li>
-            <li>Arrive 30 minutes before your scheduled time</li>
-          </ul>
-
-          <h3 className="mt-4 text-sm font-semibold">Watch Stone Put</h3>
-          <div
-            className="mt-3 relative"
-            style={{ paddingBottom: "56.25%", height: 0 }}
-          >
-            <iframe
-              title="Stone Put example"
-              src="https://www.youtube.com/embed/DDLwMYy_UZs?si=EMj9uqlXyYEdTgq9"
-              className="absolute inset-0 w-full h-full rounded-lg"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-
-          <h3 className="mt-4 text-sm font-semibold">Sample schedule</h3>
-          <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
-            <li>09:00 — Competitor check-in</li>
-            <li>10:00 — Qualifying rounds</li>
-            <li>12:30 — Break</li>
-            <li>13:30 — Finals</li>
-          </ul>
-
-          <h3 className="mt-4 text-sm font-semibold">Gallery</h3>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {["/images/stone-put.jpg", "/images/competitor.jpg"].map((src) => (
-              <img
-                key={src}
-                src={src}
-                alt="stone"
-                className="w-full h-24 object-cover rounded-md cursor-pointer"
-                onClick={() => setLightbox(src)}
-              />
-            ))}
-          </div>
-
-          <h3 className="mt-4 text-sm font-semibold">FAQ</h3>
-          <div className="mt-2 space-y-2 text-sm text-gray-600 dark:text-gray-300">
-            <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
-              <summary className="font-medium">
-                What stone sizes are allowed?
-              </summary>
-              <div className="mt-2">
-                Stone specifications will be listed in the event rules; please
-                check before competing.
-              </div>
-            </details>
-            <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
-              <summary className="font-medium">
-                Can I practice with my own stone?
-              </summary>
-              <div className="mt-2">
-                Practice stones are allowed in the warm-up area subject to
-                marshal approval.
-              </div>
-            </details>
-          </div>
-        </motion.div>
       </section>
 
-      {/* Lightbox modal */}
       {lightbox && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
@@ -211,23 +241,6 @@ export default function StonePut() {
           </div>
         </div>
       )}
-
-      {/* Floating CTA */}
-      <motion.div
-        variants={fadeIn}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 0.35 }}
-        className="fixed bottom-6 right-6 z-50"
-      >
-        <Link
-          to="/register"
-          aria-label="Register for Stone Put"
-          className="btn-primary inline-flex items-center gap-3 px-5 py-3"
-        >
-          Register for Stone Put
-        </Link>
-      </motion.div>
     </>
   );
 }
@@ -279,13 +292,13 @@ function LeaderboardCard() {
       variants={fadeUp}
       initial="hidden"
       animate="visible"
-      className="mb-4 rounded-lg border p-4 bg-gray-50 dark:bg-[#0f1412] dark:border-dark-border"
+      className="card p-4"
     >
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">Stone Put — Top results</h3>
         <Link
           to="/leaderboard"
-          className="text-sm text-highland-800 dark:text-highland-300 hover:underline"
+          className="text-xs text-highland-800 dark:text-highland-300 hover:underline"
         >
           View full leaderboard
         </Link>

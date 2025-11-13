@@ -1,11 +1,9 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { fadeIn } from "../lib/anim";
+import { useState, useEffect } from "react";
+import { fadeIn, fadeUp, stagger, fieldFade } from "../lib/anim";
 import EventMap from "../components/EventMap";
 import { api } from "../lib/api";
-import { useEffect } from "react";
-import { stagger, fieldFade, fadeUp } from "../lib/anim";
 
 export default function CaberToss() {
   const [lightbox, setLightbox] = useState<string | null>(null);
@@ -20,7 +18,6 @@ export default function CaberToss() {
 
   return (
     <>
-      {/* Full-bleed hero */}
       <section className="w-full mb-8">
         <motion.div
           variants={fadeIn}
@@ -52,8 +49,7 @@ export default function CaberToss() {
             <div className="h-full w-full bg-gradient-to-b from-white/70 via-transparent to-transparent dark:from-black/60" />
           </motion.div>
 
-          {/* bottom opacity fade to page background */}
-          <div className=" absolute left-0 right-0 bottom-0 h-48 pointer-events-none bg-gradient-to-b from-transparent to-white dark:to-[#0a0a0a]" />
+          <div className="absolute left-0 right-0 bottom-0 h-48 pointer-events-none bg-gradient-to-b from-transparent to-white dark:to-[#0a0a0a]" />
 
           <motion.div
             variants={fadeIn}
@@ -75,130 +71,161 @@ export default function CaberToss() {
       </section>
 
       <section className="container-page section">
-        <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-start">
-          <div>
-            <div className="rounded-2xl border bg-white p-6 shadow-soft dark:bg-dark-card dark:border-dark-border h-full flex flex-col justify-center">
-              <h2 className="text-lg font-semibold">Overview</h2>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                The Caber Toss is a traditional Scottish strength event.
-                Competitors aim to toss a large tapered pole (the caber) so that
-                it turns end over end and lands in the 12 o'clock position
-                relative to the thrower.
-              </p>
+        <div className="space-y-6">
+          <div className="card p-6 lg:p-7 lg:flex lg:items-stretch lg:gap-8">
+            <div className="flex-1 space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold">Overview</h2>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                  The Caber Toss is a traditional Scottish strength event.
+                  Competitors aim to toss a large tapered pole (the caber) so
+                  that it turns end over end and lands in the 12 o&apos;clock
+                  position relative to the thrower.
+                </p>
+              </div>
 
-              <h3 className="mt-4 text-sm font-medium">When</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                See the event schedule on the main page or event map.
-              </p>
-
-              <motion.div
-                variants={fadeIn}
-                initial="hidden"
-                animate="visible"
-                transition={{ delay: 0.18 }}
-                className="mt-4"
-              >
-                <Link
-                  to="/register"
-                  aria-label="Register for Caber Toss"
-                  className="btn-primary inline-flex items-center gap-3"
-                >
-                  Register
-                </Link>
-                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                  Limited spots! Sign up now
+              <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                    When
+                  </h3>
+                  <p className="mt-1 text-gray-600 dark:text-gray-300">
+                    See the event schedule on the main page or event map.
+                  </p>
                 </div>
-              </motion.div>
+              </div>
+
+              <div>
+                <motion.div
+                  variants={fadeIn}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ delay: 0.18 }}
+                  className="mt-2"
+                >
+                  <Link
+                    to="/register"
+                    aria-label="Register for Caber Toss"
+                    className="btn-primary inline-flex items-center gap-3"
+                  >
+                    Register
+                  </Link>
+                  <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    Limited spots! Sign up now
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+
+            <div className="mt-6 lg:mt-0 lg:w-[320px] xl:w-[360px] shrink-0">
+              <div className="h-[240px] md:h-[260px] rounded-xl overflow-hidden border border-gray-200 dark:border-[#3a4742]">
+                <EventMap focusId="caber" zoomLevel={18} />
+              </div>
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                <span className="font-semibold">Field location.</span>{" "}
+                Find where the Caber Toss takes place on the grounds.
+              </p>
             </div>
           </div>
 
-          <div className="relative z-0">
-            <EventMap focusId="caber" zoomLevel={18} />
+          <div className="grid lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1.1fr)] gap-6 items-start">
+            <div className="card p-6 space-y-6">
+              <div>
+                <h3 className="text-sm font-semibold">Entry requirements</h3>
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
+                  <li>
+                    Minimum age: 18 (under-18s may compete with guardian
+                    consent)
+                  </li>
+                  <li>Signed waiver on the day</li>
+                  <li>
+                    Competitors should wear closed footwear and arrive 30
+                    minutes early
+                  </li>
+                  <li>One entry per competitor; club entries accepted</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold">Sample schedule</h3>
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
+                  <li>10:00 — Competitor check-in &amp; warm-up</li>
+                  <li>11:00 — Qualifying rounds</li>
+                  <li>13:00 — Lunch break</li>
+                  <li>14:00 — Finals</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold">FAQ</h3>
+                <div className="mt-2 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                  <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
+                    <summary className="font-medium">
+                      Can I bring my own caber?
+                    </summary>
+                    <div className="mt-2">
+                      Yes — but it must meet safety checks by the event marshal
+                      before competing.
+                    </div>
+                  </details>
+                  <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
+                    <summary className="font-medium">
+                      Are spectators allowed near the arena?
+                    </summary>
+                    <div className="mt-2">
+                      Spectators may watch from designated viewing areas for
+                      safety.
+                    </div>
+                  </details>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <LeaderboardCard />
+
+              <div className="card p-4">
+                <h3 className="text-sm font-semibold">Watch a Caber Toss</h3>
+                <div
+                  className="mt-3 relative rounded-lg overflow-hidden"
+                  style={{ paddingBottom: "56.25%", height: 0 }}
+                >
+                  <iframe
+                    title="Caber Toss example"
+                    src="https://www.youtube.com/embed/5_L8TQt9xzU?si=Gk0CH3dfNSLcDsPm"
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+
+              <div className="card p-4">
+                <h3 className="text-sm font-semibold">Gallery</h3>
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {["/images/caber-toss.jpg", "/images/competitor.jpg"].map(
+                    (src) => (
+                      <button
+                        key={src}
+                        type="button"
+                        className="relative block w-full h-20 rounded-md overflow-hidden focus:outline-none focus:ring-2 focus:ring-highland-500"
+                        onClick={() => setLightbox(src)}
+                      >
+                        <img
+                          src={src}
+                          alt="caber"
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    )
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <motion.div
-          variants={fadeIn}
-          initial="hidden"
-          animate="visible"
-          transition={{ delay: 0.28 }}
-          className="mt-6 rounded-2xl border bg-white p-6 shadow-soft dark:bg-dark-card dark:border-dark-border"
-        >
-          {/* Caber Toss leaderboard (top 5) */}
-          <LeaderboardCard />
-
-          <h3 className="text-sm font-semibold">Entry requirements</h3>
-          <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
-            <li>
-              Minimum age: 18 (under-18s may compete with guardian consent)
-            </li>
-            <li>Signed waiver on the day</li>
-            <li>
-              Competitors should wear closed footwear and arrive 30 minutes
-              early
-            </li>
-            <li>One entry per competitor; club entries accepted</li>
-          </ul>
-
-          <h3 className="mt-4 text-sm font-semibold">Watch a Caber Toss</h3>
-          <div
-            className="mt-3 relative"
-            style={{ paddingBottom: "56.25%", height: 0 }}
-          >
-            <iframe
-              title="Caber Toss example"
-              src="https://www.youtube.com/embed/5_L8TQt9xzU?si=Gk0CH3dfNSLcDsPm"
-              className="absolute inset-0 w-full h-full rounded-lg"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-
-          <h3 className="mt-4 text-sm font-semibold">Sample schedule</h3>
-          <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
-            <li>10:00 — Competitor check-in & warm-up</li>
-            <li>11:00 — Qualifying rounds</li>
-            <li>13:00 — Lunch break</li>
-            <li>14:00 — Finals</li>
-          </ul>
-
-          <h3 className="mt-4 text-sm font-semibold">Gallery</h3>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {["/images/caber-toss.jpg", "/images/competitor.jpg"].map((src) => (
-              <img
-                key={src}
-                src={src}
-                alt="caber"
-                className="w-full h-24 object-cover rounded-md cursor-pointer"
-                onClick={() => setLightbox(src)}
-              />
-            ))}
-          </div>
-
-          <h3 className="mt-4 text-sm font-semibold">FAQ</h3>
-          <div className="mt-2 space-y-2 text-sm text-gray-600 dark:text-gray-300">
-            <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
-              <summary className="font-medium">
-                Can I bring my own caber?
-              </summary>
-              <div className="mt-2">
-                Yes — but it must meet safety checks by the event marshal before
-                competing.
-              </div>
-            </details>
-            <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
-              <summary className="font-medium">
-                Are spectators allowed near the arena?
-              </summary>
-              <div className="mt-2">
-                Spectators may watch from designated viewing areas for safety.
-              </div>
-            </details>
-          </div>
-        </motion.div>
       </section>
 
-      {/* Floating Call to Action */}
       {lightbox && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
@@ -219,27 +246,10 @@ export default function CaberToss() {
           </div>
         </div>
       )}
-
-      <motion.div
-        variants={fadeIn}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 0.35 }}
-        className="fixed bottom-6 right-6 z-50"
-      >
-        <Link
-          to="/register"
-          aria-label="Register for Caber Toss"
-          className="btn-primary inline-flex items-center gap-3 px-5 py-3"
-        >
-          Register for Caber Toss
-        </Link>
-      </motion.div>
     </>
   );
 }
 
-// Lightbox modal is rendered at the end of the component return via state
 
 function LeaderboardCard() {
   type Item = {
@@ -291,13 +301,13 @@ function LeaderboardCard() {
       variants={fadeUp}
       initial="hidden"
       animate="visible"
-      className="mb-4 rounded-lg border p-4 bg-gray-50 dark:bg-[#0f1412] dark:border-dark-border"
+      className="card p-4"
     >
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-semibold">Caber Toss — Top results</h3>
         <Link
           to="/leaderboard"
-          className="text-sm text-highland-800 dark:text-highland-300 hover:underline"
+          className="text-xs text-highland-800 dark:text-highland-300 hover:underline"
         >
           View full leaderboard
         </Link>

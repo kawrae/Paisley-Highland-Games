@@ -16,7 +16,6 @@ export default function TugOWar() {
 
   return (
     <>
-      {/* Full-bleed hero */}
       <section className="w-full mb-8">
         <motion.div
           variants={fadeIn}
@@ -48,21 +47,21 @@ export default function TugOWar() {
             <div className="h-full w-full bg-gradient-to-b from-white/70 via-transparent to-transparent dark:from-black/60" />
           </motion.div>
 
-          <div className=" absolute left-0 right-0 bottom-0 h-48 pointer-events-none bg-gradient-to-b from-transparent to-white dark:to-[#0a0a0a]" />
+          <div className="absolute left-0 right-0 bottom-0 h-48 pointer-events-none bg-gradient-to-b from-transparent to-white dark:to-[#0a0a0a]" />
 
           <motion.div
             variants={fadeIn}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.12 }}
-            className="relative z-10 h-96 flex items-center justify-center px-6"
+            className="relative z-10 h-80 md:h-96 flex items-center justify-center px-6"
           >
             <div className="text-center text-highland-800 dark:text-white">
               <h1 className="h2 md:text-5xl font-bold dark:drop-shadow-lg">
-                Tug o' War
+                Tug o&apos; War
               </h1>
               <p className="lead mt-2 text-sm md:text-base opacity-90 text-highland-800 dark:text-white">
-                Details about the Tug o' War event, rules and schedule.
+                Rules, schedule and results for the Tug o&apos; War event.
               </p>
             </div>
           </motion.div>
@@ -70,163 +69,194 @@ export default function TugOWar() {
       </section>
 
       <section className="container-page section">
-        <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-start">
-          <div>
-            <div className="rounded-2xl border bg-white p-6 shadow-soft dark:bg-dark-card dark:border-dark-border h-full flex flex-col justify-center">
-              <h2 className="text-lg font-semibold">Overview</h2>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
-                Tug o' War is a team event testing coordination, strength and
-                strategy. Two teams pull on opposite ends of a rope; the first
-                team to drag the other team across a marked center line wins.
-                This page contains rules, team size information, and local
-                schedule details.
-              </p>
+        <div className="space-y-6">
+          <div className="card p-6 lg:p-7 lg:flex lg:items-stretch lg:gap-8">
+            <div className="flex-1 space-y-4">
+              <div>
+                <h2 className="text-lg font-semibold">Overview</h2>
+                <p className="mt-2 text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
+                  Tug o&apos; War is a team event testing coordination, strength
+                  and strategy. Two teams pull on opposite ends of a rope; the
+                  first team to drag the other team across a marked center line
+                  wins. This page contains rules, team size information, and
+                  local schedule details.
+                </p>
+              </div>
 
-              <h3 className="mt-4 text-sm font-medium">When</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                See the event schedule on the main page or event map.
-              </p>
+              <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                    When
+                  </h3>
+                  <p className="mt-1 text-gray-600 dark:text-gray-300">
+                    See the event schedule on the main page or event map.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 dark:text-gray-100">
+                    Format
+                  </h3>
+                  <p className="mt-1 text-gray-600 dark:text-gray-300">
+                    8-person teams, straight pull matches, finals in the
+                    afternoon session.
+                  </p>
+                </div>
+              </div>
 
-              <motion.div
-                variants={fadeIn}
-                initial="hidden"
-                animate="visible"
-                transition={{ delay: 0.18 }}
-                className="mt-4"
-              >
+              <div>
                 <Link
                   to="/register"
                   aria-label="Register for Tug o' War"
-                  className="btn-primary inline-flex items-center gap-3"
+                  className="btn-primary inline-flex items-center gap-2"
                 >
-                  Register
+                  Register to compete
                 </Link>
-                <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                  Limited spots! Sign up now
-                </div>
-              </motion.div>
+              </div>
+            </div>
+
+            <div className="mt-6 lg:mt-0 lg:w-[320px] xl:w-[360px] shrink-0">
+              <div className="h-[240px] md:h-[260px] rounded-xl overflow-hidden border border-gray-200 dark:border-[#3a4742]">
+                <EventMap focusId="tug" zoomLevel={18} />
+              </div>
+              <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                Exact field location on the games ground.
+              </p>
             </div>
           </div>
 
-          <div className="relative z-0">
-            <EventMap focusId="tug" zoomLevel={18} />
+          <div className="grid lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1.1fr)] gap-6 items-start">
+            <div className="card p-6 space-y-6">
+              <div>
+                <h3 className="text-sm font-semibold">Entry requirements</h3>
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                  <li>Team size: 8 per side (check local rules).</li>
+                  <li>All competitors must sign the event waiver.</li>
+                  <li>
+                    Closed footwear required; no metal studs near the rope.
+                  </li>
+                  <li>Arrive 30 minutes before start for check-in.</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold">Sample schedule</h3>
+                <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
+                  <li>09:30 — Team check-in &amp; briefing</li>
+                  <li>10:00 — Heats</li>
+                  <li>12:30 — Lunch break</li>
+                  <li>14:00 — Finals &amp; medal ceremony</li>
+                </ul>
+              </div>
+
+              <div>
+                <h3 className="text-sm font-semibold">FAQ</h3>
+                <div className="mt-3 space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                  <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
+                    <summary className="font-medium">
+                      Can we bring a substitute?
+                    </summary>
+                    <div className="mt-2">
+                      Substitutions are permitted up to 30 minutes before your
+                      first match, subject to marshal approval.
+                    </div>
+                  </details>
+                  <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
+                    <summary className="font-medium">
+                      Are spectators allowed near the field?
+                    </summary>
+                    <div className="mt-2">
+                      Yes, spectators can watch from the roped-off viewing areas
+                      around the arena.
+                    </div>
+                  </details>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <LeaderboardCard />
+
+              <div className="card p-4">
+                <h3 className="text-sm font-semibold">Watch Tug o&apos; War</h3>
+                <div
+                  className="mt-3 relative rounded-lg overflow-hidden"
+                  style={{ paddingBottom: "56.25%", height: 0 }}
+                >
+                  <iframe
+                    title="Tug o' War example"
+                    src="https://www.youtube.com/embed/DvAHD_egGPw?si=7qbT1KPE3n8edv6"
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+
+              <div className="card p-4">
+                <h3 className="text-sm font-semibold">Gallery</h3>
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {[
+                    "/images/tug-of-war.jpg",
+                    "/images/competitor.jpg",
+                    "/images/competitor-2.jpg",
+                  ].map((src) => (
+                    <button
+                      key={src}
+                      type="button"
+                      className="relative block w-full h-20 rounded-md overflow-hidden focus:outline-none focus:ring-2 focus:ring-highland-500"
+                      onClick={() => setLightbox(src)}
+                    >
+                      <img
+                        src={src}
+                        alt="Tug o' War"
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <motion.div
-          variants={fadeIn}
-          initial="hidden"
-          animate="visible"
-          transition={{ delay: 0.28 }}
-          className="mt-6 rounded-2xl border bg-white p-6 shadow-soft dark:bg-dark-card dark:border-dark-border"
-        >
-          {/* Tug o' War leaderboard (top 5) */}
-          <LeaderboardCard />
-
-          <h3 className="text-sm font-semibold">Entry requirements</h3>
-          <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
-            <li>Team size: 8 per side (check local rules)</li>
-            <li>All competitors must sign the event waiver</li>
-            <li>Closed footwear required; no cleats near the rope</li>
-            <li>Arrive 30 minutes before start for check-in</li>
-          </ul>
-
-          <h3 className="mt-4 text-sm font-semibold">Watch Tug o' War</h3>
-          <div
-            className="mt-3 relative"
-            style={{ paddingBottom: "56.25%", height: 0 }}
-          >
-            <iframe
-              title="Tug o' War example"
-              src="https://www.youtube.com/embed/DvAHD_egGPw?si=7qbTj1KPE3n8edv6"
-              className="absolute inset-0 w-full h-full rounded-lg"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-
-          <h3 className="mt-4 text-sm font-semibold">Sample schedule</h3>
-          <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300">
-            <li>09:30 — Team check-in & briefing</li>
-            <li>10:00 — Heats</li>
-            <li>12:30 — Lunch</li>
-            <li>14:00 — Finals</li>
-          </ul>
-
-          <h3 className="mt-4 text-sm font-semibold">Gallery</h3>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            {["/images/tug-of-war.jpg", "/images/competitor.jpg"].map((src) => (
-              <img
-                key={src}
-                src={src}
-                alt="tug"
-                className="w-full h-24 object-cover rounded-md cursor-pointer"
-                onClick={() => setLightbox(src)}
-              />
-            ))}
-          </div>
-
-          <h3 className="mt-4 text-sm font-semibold">FAQ</h3>
-          <div className="mt-2 space-y-2 text-sm text-gray-600 dark:text-gray-300">
-            <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
-              <summary className="font-medium">
-                Can I bring a substitute?
-              </summary>
-              <div className="mt-2">
-                Substitutions permitted up to 30 minutes before your match,
-                subject to marshal approval.
-              </div>
-            </details>
-            <details className="p-3 rounded-md bg-gray-50 dark:bg-[#111]">
-              <summary className="font-medium">
-                Are spectators allowed near the field?
-              </summary>
-              <div className="mt-2">
-                Spectators may watch from designated areas for safety.
-              </div>
-            </details>
-          </div>
-        </motion.div>
       </section>
 
-      {/* Lightbox modal */}
       {lightbox && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
           onClick={() => setLightbox(null)}
         >
           <div className="relative p-4" onClick={(e) => e.stopPropagation()}>
             <button
-              className="absolute top-2 right-2 rounded bg-black/40 text-white p-2"
+              className="absolute top-2 right-2 rounded bg-black/40 text-white px-2 py-1 text-xs"
               onClick={() => setLightbox(null)}
             >
               Close
             </button>
             <img
               src={lightbox}
-              alt="lightbox"
-              className="max-w-[90vw] max-h-[80vh] rounded"
+              alt="Tug o' War"
+              className="max-w-[90vw] max-h-[80vh] rounded-lg"
             />
           </div>
         </div>
       )}
 
-      {/* Floating CTA */}
-      <motion.div
+      {/* register to compete CTA */}
+      {/* <motion.div
         variants={fadeIn}
         initial="hidden"
         animate="visible"
         transition={{ delay: 0.35 }}
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-6 right-6 z-40"
       >
         <Link
           to="/register"
           aria-label="Register for Tug o' War"
-          className="btn-primary inline-flex items-center gap-3 px-5 py-3"
+          className="btn-primary inline-flex items-center gap-2 px-5 py-3"
         >
-          Register for Tug o' War
+          Register for Tug o&apos; War
         </Link>
-      </motion.div>
+      </motion.div> */}
     </>
   );
 }
@@ -278,13 +308,13 @@ function LeaderboardCard() {
       variants={fadeUp}
       initial="hidden"
       animate="visible"
-      className="mb-4 rounded-lg border p-4 bg-gray-50 dark:bg-[#0f1412] dark:border-dark-border"
+      className="card p-4"
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold">Tug o' War — Top results</h3>
+        <h3 className="text-sm font-semibold">Tug o&apos; War — Top results</h3>
         <Link
           to="/leaderboard"
-          className="text-sm text-highland-800 dark:text-highland-300 hover:underline"
+          className="text-xs text-highland-800 dark:text-highland-300 hover:underline"
         >
           View full leaderboard
         </Link>
@@ -307,7 +337,7 @@ function LeaderboardCard() {
             <motion.li
               key={it._id}
               variants={fieldFade}
-              className="flex items-center justify-between"
+              className="flex items-center justify-between text-sm"
             >
               <div className="flex items-center gap-3">
                 <div className="text-xl">
@@ -326,14 +356,14 @@ function LeaderboardCard() {
                 <div className="font-semibold text-highland-800 dark:text-dark-heading">
                   {it.score}
                 </div>
-                <div className="text-xs text-gray-500">#{it.position}</div>
+                <div className="text-[11px] text-gray-500">#{it.position}</div>
               </div>
             </motion.li>
           ))}
         </motion.ol>
       )}
       {totalCount > items.length && (
-        <div className="mt-2 text-xs text-gray-500">
+        <div className="mt-2 text-[11px] text-gray-500">
           Showing top {items.length} of {totalCount} results
         </div>
       )}
