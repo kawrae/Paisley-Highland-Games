@@ -11,6 +11,7 @@ import Events from "./pages/Events";
 import CaberToss from "./pages/caberToss";
 import TugOWar from "./pages/tugOWar";
 import StonePut from "./pages/stonePut";
+import About from "./pages/About";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
           <Route path="/events/caber" element={<CaberToss />} />
           <Route path="/events/tugowar" element={<TugOWar />} />
           <Route path="/events/stone" element={<StonePut />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </main>
       <Footer />

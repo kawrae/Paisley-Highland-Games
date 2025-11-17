@@ -146,7 +146,7 @@ export default function TugOWar() {
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold">Sample schedule</h3>
+                <h3 className="text-sm font-semibold">Schedule</h3>
                 <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
                   <li>09:30 — Team check-in & briefing</li>
                   <li>10:00 — Heats</li>
@@ -212,7 +212,6 @@ export default function TugOWar() {
                   {[
                     "/images/tug-of-war.jpg",
                     "/images/competitor.jpg",
-                    "/images/competitor-2.jpg",
                   ].map((src) => (
                     <button
                       key={src}

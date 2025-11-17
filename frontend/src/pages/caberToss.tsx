@@ -144,7 +144,7 @@ export default function CaberToss() {
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold">Sample schedule</h3>
+                <h3 className="text-sm font-semibold">Schedule</h3>
                 <ul className="mt-2 ml-4 list-disc text-sm text-gray-600 dark:text-gray-300 space-y-1">
                   <li>10:00 — Competitor check-in & warm-up</li>
                   <li>11:00 — Qualifying rounds</li>
