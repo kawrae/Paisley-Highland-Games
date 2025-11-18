@@ -46,7 +46,7 @@ export default function Leaderboard() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
 
-  // Add-result modal
+  // add results modal
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
@@ -57,7 +57,7 @@ export default function Leaderboard() {
     score: 0
   });
 
-  // Delete-result modal
+  // delete resuls logic
   const [delOpen, setDelOpen] = useState(false);
   const [delTarget, setDelTarget] = useState<Result | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -130,7 +130,7 @@ export default function Leaderboard() {
     setDeleting(true);
     const id = delTarget._id;
 
-    // optimistic
+    // optimistic remove
     setResults((prev) => {
       const next = prev.filter((r) => r._id !== id);
       localStorage.setItem(LS_RESULTS, JSON.stringify(next));
@@ -238,7 +238,7 @@ export default function Leaderboard() {
 
       <div className="rounded-2xl border bg-white shadow-soft overflow-hidden
                       dark:bg-dark-card dark:border-dark-border dark:shadow-softDark">
-        {/* Desktop */}
+        {/* desktop container */}
         <div className="hidden md:block">
           <div className="grid grid-cols-12 bg-gray-50 px-4 py-3 text-sm font-semibold text-gray-700
                           dark:bg-[#26302c] dark:text-dark-text">
@@ -286,7 +286,7 @@ export default function Leaderboard() {
           )}
         </div>
 
-        {/* Mobile */}
+        {/* mobile responsiove container */}
         <div className="md:hidden divide-y dark:divide-dark-border">
           {loading ? (
             <div className="p-4 text-gray-500 dark:text-gray-300">Loading…</div>
@@ -320,7 +320,7 @@ export default function Leaderboard() {
         </div>
       </div>
 
-      {/* Add Result modal */}
+      {/* add results */}
       {open && isAdmin && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <motion.div
@@ -415,7 +415,7 @@ export default function Leaderboard() {
         </div>
       )}
 
-      {/* Delete Result modal */}
+      {/* delete results */}
       {delOpen && delTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <motion.div
@@ -434,20 +434,6 @@ export default function Leaderboard() {
               <p className="text-gray-700 dark:text-gray-300">
                 Are you sure you want to delete this result? This action cannot be undone.
               </p>
-
-              <div className="rounded-lg border bg-gray-50 p-3 text-sm dark:bg-[#26302c] dark:border-dark-border">
-                <div className="font-semibold text-gray-900 dark:text-dark-text">{delTarget.athlete}</div>
-                {delTarget.club && <div className="text-gray-600 dark:text-gray-400">{delTarget.club}</div>}
-                <div className="mt-1 flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                  <span className="inline-flex items-center gap-1">
-                    <Medal pos={delTarget.position} /> Place {delTarget.position}
-                  </span>
-                  <span>•</span>
-                  <span>{delTarget.eventName}</span>
-                  <span>•</span>
-                  <span className="font-semibold text-highland-800 dark:text-dark-heading">{delTarget.score}</span>
-                </div>
-              </div>
             </div>
 
             <div className="mt-5 flex items-center justify-end gap-2">

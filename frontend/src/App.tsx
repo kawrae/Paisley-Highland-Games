@@ -1,3 +1,4 @@
+// src/App.tsx
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Routes, Route } from "react-router-dom";
@@ -13,29 +14,32 @@ import TugOWar from "./pages/tugOWar";
 import StonePut from "./pages/stonePut";
 import About from "./pages/About";
 import CookieBanner from "./components/CookieBanner";
-import Privacy from "./pages/Privacy";
+import CookieModal from "./components/CookieModal";
+import { CookieModalProvider } from "./context/CookieModalContext";
 
 export default function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/admin/registrations" element={<AdminRegistrations />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/events/caber" element={<CaberToss />} />
-          <Route path="/events/tugowar" element={<TugOWar />} />
-          <Route path="/events/stone" element={<StonePut />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/privacy" element={<Privacy />} />
-        </Routes>
-        <CookieBanner />
-      </main>
-      <Footer />
-    </div>
+    <CookieModalProvider>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/admin/registrations" element={<AdminRegistrations />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/events/caber" element={<CaberToss />} />
+            <Route path="/events/tugowar" element={<TugOWar />} />
+            <Route path="/events/stone" element={<StonePut />} />
+            <Route path="/about" element={<About />} />
+          </Routes>
+          <CookieBanner />
+        </main>
+        <Footer />
+        <CookieModal />
+      </div>
+    </CookieModalProvider>
   );
 }

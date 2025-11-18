@@ -115,9 +115,9 @@ export default function AdminRegistrations() {
         )}
       </motion.div>
 
-      {/* Controls */}
+      {/* controls */}
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center">
-        {/* Filter group */}
+        {/* filter groups */}
         <div className="inline-flex rounded-lg border p-1 bg-white dark:bg-dark-card dark:border-dark-border">
           {(["pending", "approved", "rejected", "all"] as const).map((key) => {
             const active =
@@ -139,7 +139,7 @@ export default function AdminRegistrations() {
           })}
         </div>
 
-        {/* Search */}
+        {/* search bar */}
         <input
           value={q}
           onChange={(e) => {
@@ -151,7 +151,7 @@ export default function AdminRegistrations() {
         />
       </div>
 
-      {/* Table card (force consistent surface) */}
+      {/* table card */}
       <div
         className="
           overflow-hidden
@@ -159,7 +159,7 @@ export default function AdminRegistrations() {
           dark:border-dark-border dark:bg-dark-card dark:shadow-softDark
         "
       >
-        {/* Card header strip */}
+        {/*  card header  */}
         <div
           className="
             hidden md:grid grid-cols-12 px-4 py-3 text-sm font-semibold

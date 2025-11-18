@@ -18,7 +18,6 @@ export default function Login() {
       await login(email, password);
       nav("/leaderboard");
     } catch (e: any) {
-      // backend returns { error: "..." }
       setErr(e?.response?.data?.error ?? "Login failed");
     } finally {
       setBusy(false);

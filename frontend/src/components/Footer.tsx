@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import { FaGithub, FaGlobe, FaEnvelope } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useCookieModal } from "../context/CookieModalContext";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const { open } = useCookieModal();
 
   return (
     <motion.footer
@@ -13,7 +14,6 @@ export default function Footer() {
       className="relative mt-20 bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-800 text-gray-100 py-10 before:absolute before:top-0 before:left-0 before:w-full before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent"
     >
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-        
         <div className="text-center md:text-left">
           <h3 className="text-lg font-semibold text-white">
             Paisley Highland Games
@@ -24,7 +24,6 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col items-center gap-3 text-sm">
-          
           <div className="flex items-center gap-6 text-sm">
             <a
               href="https://github.com/kawrae"
@@ -52,13 +51,13 @@ export default function Footer() {
             </a>
           </div>
 
-          <Link
-            to="/privacy"
+          <button
+            type="button"
+            onClick={open}
             className="text-xs text-gray-300 hover:text-white hover:underline underline-offset-2 transition duration-200"
           >
             Privacy &amp; Cookies Policy
-          </Link>
-
+          </button>
         </div>
 
         <div className="text-center md:text-right text-sm text-gray-300">
