@@ -12,6 +12,7 @@ import CaberToss from "./pages/caberToss";
 import TugOWar from "./pages/tugOWar";
 import StonePut from "./pages/stonePut";
 import About from "./pages/About";
+import CookieBanner from "./components/CookieBanner";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/events/stone" element={<StonePut />} />
           <Route path="/about" element={<About />} />
         </Routes>
+        <CookieBanner />
       </main>
       <Footer />
     </div>
