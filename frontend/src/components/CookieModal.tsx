@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { fadeUp, stagger, fadeIn } from "../lib/anim";
+import { fadeUp, stagger } from "../lib/anim";
 import { useCookieModal } from "../context/CookieModalContext";
 
 const COOKIE_KEY = "phg_cookie_consent";
