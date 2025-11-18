@@ -43,10 +43,18 @@ const Toggle = ({
 const CookieModal: React.FC = () => {
   const { isOpen, close } = useCookieModal();
 
-  const [analytics, setAnalytics] = useState(localStorage.getItem(COOKIE_ANALYTICS) === "on");
-  const [marketing, setMarketing] = useState(localStorage.getItem(COOKIE_MARKETING) === "on");
-  const [personal, setPersonal] = useState(localStorage.getItem(COOKIE_PERSONAL) === "on");
-  const [performance, setPerformance] = useState(localStorage.getItem(COOKIE_PERF) === "on");
+  const [analytics, setAnalytics] = useState(
+    localStorage.getItem(COOKIE_ANALYTICS) === "on"
+  );
+  const [marketing, setMarketing] = useState(
+    localStorage.getItem(COOKIE_MARKETING) === "on"
+  );
+  const [personal, setPersonal] = useState(
+    localStorage.getItem(COOKIE_PERSONAL) === "on"
+  );
+  const [performance, setPerformance] = useState(
+    localStorage.getItem(COOKIE_PERF) === "on"
+  );
 
   const savePreferences = () => {
     localStorage.setItem(COOKIE_KEY, "custom");
@@ -60,8 +68,12 @@ const CookieModal: React.FC = () => {
   };
 
   const acceptAll = () => {
-    localStorage.setItem(COOKIE_KEY, "accepted");
+    setAnalytics(true);
+    setMarketing(true);
+    setPersonal(true);
+    setPerformance(true);
 
+    localStorage.setItem(COOKIE_KEY, "accepted");
     localStorage.setItem(COOKIE_ANALYTICS, "on");
     localStorage.setItem(COOKIE_MARKETING, "on");
     localStorage.setItem(COOKIE_PERSONAL, "on");
@@ -103,11 +115,18 @@ const CookieModal: React.FC = () => {
                 >
                   Privacy & Cookies
                 </motion.p>
-                <motion.h1 variants={fadeUp} className="h1 text-2xl md:text-3xl">
+                <motion.h1
+                  variants={fadeUp}
+                  className="h1 text-2xl md:text-3xl"
+                >
                   Cookie Preferences
                 </motion.h1>
-                <motion.p variants={fadeUp} className="text-sm text-gray-600 dark:text-gray-300">
-                  Choose which optional cookies you'd like to enable. Essential cookies are always active.
+                <motion.p
+                  variants={fadeUp}
+                  className="text-sm text-gray-600 dark:text-gray-300"
+                >
+                  Choose which optional cookies you'd like to enable. Essential
+                  cookies are always active.
                 </motion.p>
               </header>
 
@@ -116,7 +135,6 @@ const CookieModal: React.FC = () => {
                 <h2 className="h2 text-xl md:text-2xl">Cookie Settings</h2>
 
                 <div className="border rounded-lg p-4 dark:border-gray-700 space-y-4">
-
                   <Toggle
                     label="Essential Cookies (required)"
                     enabled={true}
@@ -161,7 +179,7 @@ const CookieModal: React.FC = () => {
                 variants={fadeUp}
                 className="text-xs text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-[#3a4742]"
               >
-                This is a university coursework project. This website does not actually store or track real cookies.
+                This is a university coursework project. This website does not actually store or track cookies.
               </motion.p>
             </motion.div>
 
