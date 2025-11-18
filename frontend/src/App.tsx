@@ -13,6 +13,7 @@ import TugOWar from "./pages/tugOWar";
 import StonePut from "./pages/stonePut";
 import About from "./pages/About";
 import CookieBanner from "./components/CookieBanner";
+import Privacy from "./pages/Privacy";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/events/tugowar" element={<TugOWar />} />
           <Route path="/events/stone" element={<StonePut />} />
           <Route path="/about" element={<About />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Routes>
         <CookieBanner />
       </main>

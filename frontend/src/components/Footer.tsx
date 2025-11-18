@@ -12,7 +12,7 @@ export default function Footer() {
       className="relative mt-20 bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-800 text-gray-100 py-10 before:absolute before:top-0 before:left-0 before:w-full before:h-[1px] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent"
     >
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-        {/* Left side */}
+        
         <div className="text-center md:text-left">
           <h3 className="text-lg font-semibold text-white">
             Paisley Highland Games
@@ -22,33 +22,44 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Center divider */}
-        <div className="flex items-center gap-6 text-sm">
+        <div className="flex flex-col items-center gap-3 text-sm">
+          
+          <div className="flex items-center gap-6 text-sm">
+            <a
+              href="https://github.com/kawrae"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-emerald-300 transition transform hover:-translate-y-0.3 hover:scale-105 duration-200"
+            >
+              <FaGithub className="text-lg" /> Corey Black
+            </a>
+
+            <a
+              href="https://github.com/Abs3601"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 hover:text-emerald-300 transition transform hover:-translate-y-0.3 hover:scale-105 duration-200"
+            >
+              <FaGithub className="text-lg" /> Abdullah Barkaji
+            </a>
+
+            <a
+              href="mailto:B01651145@studentmail.uws.ac.uk"
+              className="flex items-center gap-2 hover:text-emerald-300 transition transform hover:-translate-y-0.3 hover:scale-105 duration-200"
+            >
+              <FaEnvelope className="text-lg" /> Contact Us
+            </a>
+          </div>
+
           <a
-            href="https://github.com/kawrae"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:text-emerald-300 transition transform hover:-translate-y-0.3 hover:scale-105 duration-200"
+            href="/privacy"
+            className="text-xs text-gray-300 hover:text-white hover:underline underline-offset-2 transition duration-200"
           >
-            <FaGithub className="text-lg" /> Corey Black
+            Privacy &amp; Cookies Policy
           </a>
-          <a
-            href="https://github.com/Abs3601"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:text-emerald-300 transition transform hover:-translate-y-0.3 hover:scale-105 duration-200"
-          >
-            <FaGithub className="text-lg" /> Abdullah Barkaji
-          </a>
-          <a
-            href="mailto:B01651145@studentmail.uws.ac.uk"
-            className="flex items-center gap-2 hover:text-emerald-300 transition transform hover:-translate-y-0.3 hover:scale-105 duration-200"
-          >
-            <FaEnvelope className="text-lg" /> Contact Us
-          </a>
+
         </div>
 
-        {/* Right side */}
         <div className="text-center md:text-right text-sm text-gray-300">
           <p>
             Built with <span className="font-semibold text-white">React</span>,{" "}
@@ -66,7 +77,6 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Subtle divider line */}
       <div className="mt-8 h-[1px] w-full bg-gradient-to-r from-transparent via-gray-500/20 to-transparent" />
     </motion.footer>
   );
