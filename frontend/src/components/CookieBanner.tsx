@@ -44,7 +44,10 @@ const CookieBanner: React.FC = () => {
 
             <button
               type="button"
-              onClick={open}
+              onClick={() => {
+                open();
+                setIsOpen(false);
+              }}
               className="btn-ghost rounded-full border border-transparent hover:border-highland-200 dark:hover:border-dark-border"
             >
               Edit preferences
