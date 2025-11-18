@@ -5,22 +5,18 @@ type ConsentValue = "accepted" | "rejected" | null;
 const COOKIE_KEY = "phg_cookie_consent";
 
 const CookieBanner: React.FC = () => {
-  const [consent, setConsent] = useState<ConsentValue>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(COOKIE_KEY) as ConsentValue;
     if (!stored) {
       setIsOpen(true);
-    } else {
-      setConsent(stored);
     }
   }, []);
 
   const handleConsent = (value: ConsentValue) => {
     if (!value) return;
     localStorage.setItem(COOKIE_KEY, value);
-    setConsent(value);
     setIsOpen(false);
   };
 
@@ -35,9 +31,9 @@ const CookieBanner: React.FC = () => {
               We use cookies
             </h2>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-dark-muted">
-              We use essential cookies to make this site work. With your consent,
-              we&apos;d also like to use optional analytics cookies to help us
-              improve it. You can change your choice at any time.
+              We use essential cookies to make this site work. With your
+              consent, we&apos;d also like to use optional analytics cookies to
+              help us improve it. You can change your choice at any time.
             </p>
             <a
               href="/privacy"
