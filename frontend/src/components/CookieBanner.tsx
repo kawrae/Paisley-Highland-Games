@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 type ConsentValue = "accepted" | "rejected" | null;
 
@@ -35,12 +36,12 @@ const CookieBanner: React.FC = () => {
               consent, we&apos;d also like to use optional analytics cookies to
               help us improve it. You can change your choice at any time.
             </p>
-            <a
-              href="/privacy"
+            <Link
+              to="/privacy"
               className="text-xs font-medium text-highland-700 underline underline-offset-2 hover:text-highland-800 dark:text-dark-accent dark:hover:text-dark-accentHover"
             >
               Read our Privacy &amp; Cookie Policy
-            </a>
+            </Link>
           </div>
 
           <div className="flex flex-wrap items-center gap-2 md:justify-end">
