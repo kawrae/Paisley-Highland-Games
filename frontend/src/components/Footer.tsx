@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FaGithub, FaGlobe, FaEnvelope } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -51,12 +52,12 @@ export default function Footer() {
             </a>
           </div>
 
-          <a
-            href="/privacy"
+          <Link
+            to="/privacy"
             className="text-xs text-gray-300 hover:text-white hover:underline underline-offset-2 transition duration-200"
           >
             Privacy &amp; Cookies Policy
-          </a>
+          </Link>
 
         </div>
 
